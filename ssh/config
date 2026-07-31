@@ -1,0 +1,6 @@
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/private-ssh-key
+    AddKeysToAgent yes
+    UseKeychain yes

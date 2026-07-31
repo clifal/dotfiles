@@ -1,0 +1,9 @@
+[user]
+	name = USERNAME
+	email = 123456789+USERNAME@users.noreply.github.com
+
+[includeIf "gitdir:~/repo/COMPANY-NAME/"]
+	path = ~/.gitconfig-for-COMPANY-NAME
+
+[core]
+	excludesfile = ~/.gitignore-global

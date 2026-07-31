@@ -1,0 +1,7 @@
+[
+  {
+    "key": "shift+space",
+    "command": "editor.action.triggerSuggest",
+    "when": "editorTextFocus && !editorReadonly"
+  }
+]
