@@ -33,6 +33,37 @@
       ]
     },
     {
+      "description": "USB keyboard: Left Command to Left Ctrl",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "left_control",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_command"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "is_built_in_keyboard": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "description": "Command+Space toggles Japanese and Roman input",
       "manipulators": [
         {
