@@ -6,8 +6,8 @@ export PATH="$(brew --prefix rustup)/bin:$PATH"
 
 # Command Alias
 alias ls='ls -a'
-alias brewupf="brew update && brew upgrade --formula && brew cleanup"'
-alias brewupc="brew update && brew upgrade --cask && brew cleanup"'
+alias brewupf='brew update && brew upgrade --formula && brew cleanup'
+alias brewupc='brew update && brew upgrade --cask && brew cleanup'
 
 # Hook mise
 eval "$(mise activate zsh)"
