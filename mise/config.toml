@@ -1,0 +1,8 @@
+[tools]
+awscli = { version = "2.36.16", symlink_bins = "true" }
+helm = "4.2.4"
+kubectl = "1.36.3"
+node = "lts"
+python = "3.14"
+terraform = "1.15.8"
+tflint = "0.64.0"

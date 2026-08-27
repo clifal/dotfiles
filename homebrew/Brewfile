@@ -1,0 +1,72 @@
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
+# Rust toolchain installer
+brew "rustup"
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+# Audio utility
+cask "background-music"
+# Terminal-based AI coding assistant
+cask "claude-code"
+# Web browser
+cask "google-chrome"
+# Japanese input software
+cask "google-japanese-ime"
+# Keyboard customiser
+cask "karabiner-elements"
+# Support for Logitech G gear
+cask "logitech-g-hub"
+# App to write, plan, collaborate, and get organised
+cask "notion"
+# Control your tools with a few keystrokes
+cask "raycast"
+# Screenshot measurement and annotation tool
+cask "shottr"
+# Team communication and collaboration software
+cask "slack"
+# Music streaming service
+cask "spotify"
+# Open-source code editor
+cask "visual-studio-code"
+vscode "anthropic.claude-code"
+vscode "bierner.github-markdown-preview"
+vscode "bierner.markdown-checkbox"
+vscode "bierner.markdown-emoji"
+vscode "bierner.markdown-footnotes"
+vscode "bierner.markdown-preview-github-styles"
+vscode "bierner.markdown-yaml-preamble"
+vscode "charliermarsh.ruff"
+vscode "christian-kohler.path-intellisense"
+vscode "chrmarti.regex"
+vscode "davidanson.vscode-markdownlint"
+vscode "esbenp.prettier-vscode"
+vscode "gxl.git-graph-3"
+vscode "hashicorp.terraform"
+vscode "hediet.vscode-drawio"
+vscode "humao.rest-client"
+vscode "jebbs.plantuml"
+vscode "marp-team.marp-vscode"
+vscode "mechatroner.rainbow-csv"
+vscode "mosapride.zenkaku"
+vscode "ms-azuretools.vscode-azureterraform"
+vscode "ms-ceintl.vscode-language-pack-ja"
+vscode "ms-pyright.pyright"
+vscode "ms-python.debugpy"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode-remote.remote-ssh"
+vscode "ms-vscode-remote.remote-ssh-edit"
+vscode "ms-vscode-remote.vscode-remote-extensionpack"
+vscode "ms-vscode.remote-explorer"
+vscode "ms-vscode.remote-server"
+vscode "oderwat.indent-rainbow"
+vscode "pkief.material-icon-theme"
+vscode "quicktype.quicktype"
+vscode "rogalmic.bash-debug"
+vscode "shardulm94.trailing-spaces"
+vscode "streetsidesoftware.code-spell-checker"
+vscode "techer.open-in-browser"
+vscode "tomoki1207.pdf"
+vscode "wmaurer.change-case"
+vscode "zignd.html-css-class-completion"

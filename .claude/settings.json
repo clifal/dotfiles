@@ -1,0 +1,47 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true,
+    "dig@kuu-marketplace": true,
+    "genshijin@genshijin": true
+  },
+  "extraKnownMarketplaces": {
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
+    },
+    "kuu-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "fumiya-kume/claude-code"
+      }
+    },
+    "genshijin": {
+      "source": {
+        "source": "github",
+        "repo": "InterfaceX-co-jp/genshijin"
+      }
+    }
+  },
+  "theme": "dark",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"セッション開始時、最初の応答前に Skill ツールで genshijin:genshijin を呼び出し、原始人モード(強度:通常)を有効化せよ。\"}}'"
+          }
+        ]
+      }
+    ]
+  },
+  "effortLevel": "high",
+  "model": "opus[1m]",
+  "switchModelsOnFlag": false
+}
