@@ -20,6 +20,7 @@
 .claude/statsig/
 .claude/projects/
 .claude/history.jsonl
+.claude/skills/archify/
 
 # Secrets and credentials
 .env
