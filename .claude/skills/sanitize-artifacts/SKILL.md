@@ -1,6 +1,6 @@
 ---
 name: sanitize-artifacts
-description: Inspect and revise generated artifacts so they read as natural, standalone deliverables, without leaking prompt instructions, conversation history, implementation constraints, or production process artifacts into user-facing content.
+description: Inspect and revise generated artifacts so they read as natural, standalone deliverables, without leaking prompt instructions, conversation history, implementation constraints, or production process artifacts into user-facing content. Covers rewriting a document end to end when the residue is structural rather than local.
 ---
 
 # sanitize-artifacts
@@ -8,6 +8,14 @@ description: Inspect and revise generated artifacts so they read as natural, sta
 Use this skill when the user asks you to inspect, clean up, sanitize, revise, polish, or quality-check artifacts produced during the current work session.
 
 This skill is especially important when the artifact was produced through iterative prompting, corrective instructions, examples, constraints, or vibe-coding-style collaboration.
+
+## Invocation
+
+`/sanitize-artifacts @file` — when a file path is given as an argument, read that file in full, sanitize it, and overwrite the file with the revised content. In that case, do not also print the full artifact to chat; report only what changed if the user asks.
+
+Without an argument, the target is whatever artifact was produced in the current session, and the Output Rules below apply.
+
+When the residue is structural rather than local — superseded passages, "changed from X to Y", "as noted above", a revision log nobody asked for — the job is a whole-document rewrite, not phrase deletion. See Rewriting a whole document below.
 
 ## Goal
 
@@ -116,6 +124,14 @@ When sanitizing an artifact, check:
 ## Revision Strategy
 
 Prefer rewriting over explaining.
+
+### Rewriting a whole document
+
+Some documents carry residue in their structure: they were edited round after round until they read as a transcript of their own revision. Rewrite those end to end, so the result reads as one author's single pass at the final design.
+
+- Rewrite the sentence, not the phrase. Deleting "as noted above" leaves the sentence broken and still bound to a conversation the reader never saw.
+- Drop revision history, decision logs, and meta-commentary about the document itself ("this section replaces the old one"), unless recording decisions is the document's purpose, as in an ADR.
+- A rewrite is not a summary. Every technical detail, decision, and constraint survives at its original specificity; the writing changes, the content does not.
 
 Do not add a report about what you sanitized unless the user asks for one.
 
