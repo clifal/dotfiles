@@ -1,15 +1,15 @@
 ---
-name: translate-to-english-comment
-description: Use when the user runs /translate-to-english-comment with Japanese text, or asks to translate Japanese into a concise English programming comment.
+name: en-comment
+description: Use when the user runs /en-comment with Japanese text, or asks to translate Japanese into a concise English programming comment.
 ---
 
-# translate-to-english-comment
+# en-comment
 
 日本語入力を英語翻訳 → 簡潔なプログラミング用コメントに変換。
 
 ## 起動
 
-`/translate-to-english-comment <日本語テキスト>`
+`/en-comment <日本語テキスト>`
 
 ## 手順
 

@@ -12,7 +12,7 @@ macOS のセットアップ用設定ファイル一式。Windows に近いキー
 - `karabiner/` — Karabiner-Elements のキーマッピング
 - `mise/` — mise で管理する言語・CLI ランタイムのバージョン定義
 - `vscode/` — VS Code のキーバインドと設定断片
-- `zsh/` — zsh の設定
+- `zsh/` — zsh の設定（`.zshrc` と `.zshenv`）
 
 ## セットアップ
 
@@ -62,10 +62,15 @@ Rust のツールチェーンが必要な場合は、`rustup` の導入後に `r
 
 ```sh
 cp zsh/.zshrc ~/.zshrc
+cp zsh/.zshenv ~/.zshenv
 exec $SHELL -l
 ```
 
-`mise` のシェル連携と、keg-only である `rustup` の PATH 設定が含まれます。
+`.zshrc` には `mise` のシェル連携と、keg-only である `rustup` の PATH 設定が
+含まれます。`.zshrc` は interactive shell でしか読まれないため、Claude Code の
+ような non-interactive shell からは反映されません。そのため `.zshenv` で
+`~/.cargo/bin`、`~/.local/bin`、mise の shims ディレクトリを PATH へ追加して
+います。手順 8 のスキルが使う `suiko` や `ax` の解決に必要です。
 
 ### 5. mise
 
@@ -143,10 +148,32 @@ cp -R .claude/skills ~/.claude/
 既に `~/.claude/settings.json` がある場合、上のコマンドは既存の設定を破棄します。
 内容を確認し、必要な項目を手でマージしてください。
 
-`settings.json` には 3 つのマーケットプレイスとプラグインの有効化設定が
-含まれており、Claude Code の起動時に自動で導入されます。ステータスラインは
+`settings.json` には 4 つのマーケットプレイス（`genshijin`、`context7`、
+`understand-anything`、`mattpocock`）とプラグインの有効化設定が含まれており、
+Claude Code の起動時に自動で導入されます。ステータスラインは
 `statusline-command.sh` を呼び出し、その中で `jq` を使います。`jq` は
 macOS 15 以降に標準搭載されているため、別途の導入は不要です。
+
+#### スキル
+
+`.claude/skills/` には次のスキルが入っています。
+
+- `ax` — HTML の取得と構造化抽出を `ax` CLI で行う
+- `commit-msg` — 変更内容の日本語説明から Conventional Commits のメッセージを作る
+- `dev-workflow` — 理解から実装、コードレビューまでを人手の確認を挟んで進める
+- `en-comment` — 日本語をプログラミング用の英語コメントへ訳す
+- `pair` — 開発者が手を動かす前提でペアプログラミングの相方を務める
+- `sanitize-artifacts` — 生成物からプロンプトや会話の痕跡を取り除く
+- `suiko` — 日本語文書の不自然さと読解負荷を診断して直す
+- `tech-research` — 一次ソースを検証しながら技術動向のレポートを作る
+
+`archify`（アーキテクチャ図の生成）は約 7 MB あるため `.gitignore` で
+除外しており、上のコピーには含まれません。必要な場合は個別に取得してください。
+
+スキルのうち `suiko` と `ax` は外部の CLI に依存します。`suiko` は
+`cargo install suiko` で導入し（手順 3 で `rustup` を入れた前提）、`ax` は
+`~/.local/bin` へ配置します。どちらも手順 4 の `.zshenv` が PATH を通します。
+CLI がない場合、スキルは手動チェックへ縮退します。
 
 ### 9. Karabiner-Elements
 

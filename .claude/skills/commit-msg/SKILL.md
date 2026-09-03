@@ -1,9 +1,9 @@
 ---
-name: create-commit-message
-description: Use when the user runs /create-commit-message, or asks to turn a Japanese description of changes into an English Conventional Commits message. Triggers on requests to write, generate, or fix up a commit message from staged changes or a Japanese summary. Outputs the English message and its Japanese translation as two separate blocks.
+name: commit-msg
+description: Use when the user runs /commit-msg, or asks to turn a Japanese description of changes into an English Conventional Commits message. Triggers on requests to write, generate, or fix up a commit message from staged changes or a Japanese summary. Outputs the English message and its Japanese translation as two separate blocks.
 ---
 
-# create-commit-message
+# commit-msg
 
 日本語の変更内容を英語に翻訳し、Conventional Commits形式のコミットメッセージを生成する。あわせて同じ内容の日本語訳を別ブロックで出す。
 

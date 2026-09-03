@@ -10,6 +10,8 @@
 
 4. Fix what you agreed to fix, then re-run the review until both axes come back clean.
 
+5. Give `7-code-review.md` the suiko pass — see **Finishing an artifact** in `SKILL.md`.
+
 ## Gate
 
 - Both axes clean, or every remaining finding is written down as a ticket or a stated accepted risk.

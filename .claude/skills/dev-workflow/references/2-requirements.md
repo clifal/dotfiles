@@ -22,6 +22,8 @@ Goal: a decision record a human can act on, with a reason behind every choice.
 
 3. Call the Skill tool for `sanitize-artifacts` on `2-requirements.md`, so it reads as a standalone document rather than a transcript of this conversation.
 
+4. Then give it the suiko pass — see **Finishing an artifact** in `SKILL.md`. This doc is mostly bullets, so flatten a prose copy before linting.
+
 ## Gate
 
 - Every entry under 決定事項 carries its reason.
