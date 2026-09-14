@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "@textlint-ja/textlint-rule-preset-ai-writing": true,
+    "preset-ai-words-ja": {
+      "no-short-topic-comma": {
+        "maxLength": 5
+      }
+    }
+  }
+}

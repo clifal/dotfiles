@@ -150,31 +150,42 @@ cp -R .claude/skills ~/.claude/
 
 `settings.json` には 4 つのマーケットプレイス（`genshijin`、`context7`、
 `understand-anything`、`mattpocock`）とプラグインの有効化設定が含まれており、
-Claude Code の起動時に自動で導入されます。ステータスラインは
-`statusline-command.sh` を呼び出し、その中で `jq` を使います。`jq` は
-macOS 15 以降に標準搭載されているため、別途の導入は不要です。
+Claude Code の起動時に自動で導入されます。このうち `understand-anything` は
+`false` にしてあり、マーケットプレイスは登録するがプラグインは読み込みません。
+ステータスラインは `statusline-command.sh` を呼び出し、その中で `jq` を
+使います。`jq` は macOS 15 以降に標準搭載されているため、別途の導入は不要です。
+
+`skillOverrides` で `commit-msg`、`en-comment`、`tech-research` を
+`user-invocable-only` にしています。スキルの description は常にコンテキストへ
+読み込まれるため、自動起動させたくないものはこの指定で `/` からの明示的な
+呼び出しだけに限定します。この指定が対象にするのはローカルスキルだけで、
+プラグインとして導入したスキルでは無視されます。
 
 #### スキル
 
-`.claude/skills/` には次のスキルが入っています。
+`.claude/skills/` の中身は次のとおりです。
 
 - `ax` — HTML の取得と構造化抽出を `ax` CLI で行う
 - `commit-msg` — 変更内容の日本語説明から Conventional Commits のメッセージを作る
-- `compress-doc` — 日本語ドキュメントを技術的な中身を残したまま圧縮する
-- `dev-workflow` — 理解から実装、コードレビューまでを人手の確認を挟んで進める
+- `compress-doc` — 日本語ドキュメントを、中身を残したまま圧縮する
+- `dev-workflow` — 理解から実装、コードレビューまで人手の確認を挟んで進める
 - `en-comment` — 日本語をプログラミング用の英語コメントへ訳す
 - `pair` — 開発者が手を動かす前提でペアプログラミングの相方を務める
 - `show-me` — 図やコードのスケッチで話題を視覚的に説明する
 - `suiko` — 日本語文書の不自然さと読解負荷を診断して直す
-- `tech-research` — 一次ソースを検証しながら技術動向のレポートを作る
+- `tech-research` — 一次ソースを検証して技術動向のレポートを作る
 
-`archify`（アーキテクチャ図の生成）は約 7 MB あるため `.gitignore` で
-除外しており、上のコピーには含まれません。必要な場合は個別に取得してください。
+`archify`（アーキテクチャ図の生成）は約 7 MB あるため `.gitignore` で除外し、
+上のコピーには含まれません。
 
-スキルのうち `suiko` と `ax` は外部の CLI に依存します。`suiko` は
-`cargo install suiko` で導入し（手順 3 で `rustup` を入れた前提）、`ax` は
-`~/.local/bin` へ配置します。どちらも手順 4 の `.zshenv` が PATH を通します。
-CLI がない場合、スキルは手動チェックへ縮退します。
+`suiko` と `ax` は外部の CLI に依存します。`suiko` は `cargo install suiko` で
+導入し（手順 3 の `rustup` 前提）、`ax` は `~/.local/bin` へ置きます。PATH は
+手順 4 の `.zshenv` が通します。CLI がない場合、スキルは手動チェックへ縮退します。
+
+`suiko` は Node.js と npm があれば textlint の AI 文章 preset
+（`@textlint-ja/ai-writing` と `ai-words-ja`）も実行します。ルール構成は
+`.claude/skills/suiko/scripts/textlint-ai-writing.rc.json` で固定し、プロジェクトの
+`.textlintrc` は読みません。Node.js は手順 5 の mise が入れます。
 
 ### 9. Karabiner-Elements
 
@@ -289,3 +300,33 @@ Karabiner-EventViewerで次を確認できます。
 - この変換のため、USBキーボードの左ControlではターミナルのControl+Cを
   送れません。右Controlを使ってください。
 - USBキーボードのWindowsキー、AltキーはKarabinerでは変更していません。
+
+## スキルの配布元
+
+`.claude/skills/` のうち次の 4 つは外部のリポジトリが配布元です。入っているのは
+取り込み時点の内容で、上流の更新は反映されません。更新時は配布元と差分を
+確認してください。
+
+- `ax` — https://github.com/yusukebe/ax
+  （`npx skills add yusukebe/ax` で導入。CLI も同じリポジトリ）
+- `show-me` — https://github.com/humanlayer/skills
+- `suiko` — https://github.com/nwiizo/suiko
+  （`cargo install suiko` で入る CLI と同じリポジトリ）
+- `archify` — https://github.com/tt-a1i/archify
+  （MIT。`Cocoon-AI/architecture-diagram-generator` から派生している。手順 8 の
+  とおり収録していないので、配布元から取得する）
+
+残る `commit-msg`、`compress-doc`、`dev-workflow`、`en-comment`、`pair`、
+`tech-research` は自作で、配布元はありません。
+
+`suiko` が使う textlint 一式は収録せず、`scripts/run-textlint-ai-writing.sh` が実行の
+たびに npm の一時環境へ取得します。バージョンはスクリプト内で固定しています。
+
+- `textlint@15.8.0` — https://github.com/textlint/textlint
+- `@textlint-ja/textlint-rule-preset-ai-writing@1.7.0` —
+  https://github.com/textlint-ja/textlint-rule-preset-ai-writing
+- `textlint-rule-preset-ai-words-ja@1.2.0` —
+  https://github.com/p1ass/textlint-rule-preset-ai-words-ja
+
+3 つとも MIT です。バージョン更新時は `scripts/run-textlint-ai-writing.sh` の `--package`
+指定 2 か所を同じ値にそろえ、`scripts/textlint-ai-writing.rc.json` も確認してください。
