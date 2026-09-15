@@ -1,5 +1,8 @@
 {
   "model": "opus[1m]",
+  "skillOverrides": {
+    "tech-research": "user-invocable-only"
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -18,8 +21,7 @@
   },
   "enabledPlugins": {
     "genshijin@genshijin": true,
-    "context7@context7-marketplace": true,
-    "understand-anything@understand-anything": false,
+    "understand-anything@understand-anything": true,
     "mattpocock-skills@mattpocock": true
   },
   "extraKnownMarketplaces": {
@@ -27,12 +29,6 @@
       "source": {
         "source": "github",
         "repo": "InterfaceX-co-jp/genshijin"
-      }
-    },
-    "context7-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "upstash/context7"
       }
     },
     "understand-anything": {
@@ -50,10 +46,5 @@
   },
   "effortLevel": "high",
   "theme": "dark",
-  "switchModelsOnFlag": false,
-  "skillOverrides": {
-    "commit-msg": "user-invocable-only",
-    "en-comment": "user-invocable-only",
-    "tech-research": "user-invocable-only"
-  }
+  "switchModelsOnFlag": false
 }

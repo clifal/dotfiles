@@ -58,6 +58,10 @@ VS Code 拡張は `code` コマンド経由で導入されるため、Visual Stu
 Rust のツールチェーンが必要な場合は、`rustup` の導入後に `rustup-init` を
 別途実行します。
 
+cask の `swift-quit` は、ウィンドウをすべて閉じたアプリを自動で終了させます。
+Windows に近い挙動にするためのもので、初回起動時にアクセシビリティの許可と
+ログイン時の自動起動を設定してください。
+
 ### 4. zsh
 
 ```sh
@@ -80,9 +84,14 @@ cp mise/config.toml ~/.config/mise/config.toml
 mise install
 ```
 
-Node.js、Python、Terraform、kubectl、Helm、AWS CLI、TFLint のバージョンを
-固定しています。Homebrew ではなく mise 側で管理しているため、この手順を
-飛ばすとこれらのコマンドは利用できません。
+Node.js、pnpm、Python、Terraform、kubectl、Helm、AWS CLI、TFLint、yq の
+バージョンを固定しています。この手順を飛ばすとこれらのコマンドは利用できません。
+
+Terraform だけは手順 3 の Brewfile でも `hashicorp/tap/terraform` を入れています。
+PATH では `/opt/homebrew/bin` が mise の shims より先に来るため、`terraform` を
+そのまま実行すると Homebrew 側が使われます。mise で固定したバージョンを使いたい
+ときは `mise exec terraform -- terraform ...` と書くか、`brew uninstall terraform`
+で Homebrew 側を外してください。
 
 ### 6. Git
 
@@ -148,15 +157,15 @@ cp -R .claude/skills ~/.claude/
 既に `~/.claude/settings.json` がある場合、上のコマンドは既存の設定を破棄します。
 内容を確認し、必要な項目を手でマージしてください。
 
-`settings.json` には 4 つのマーケットプレイス（`genshijin`、`context7`、
+`settings.json` には 3 つのマーケットプレイス（`genshijin`、
 `understand-anything`、`mattpocock`）とプラグインの有効化設定が含まれており、
-Claude Code の起動時に自動で導入されます。このうち `understand-anything` は
-`false` にしてあり、マーケットプレイスは登録するがプラグインは読み込みません。
-ステータスラインは `statusline-command.sh` を呼び出し、その中で `jq` を
+Claude Code の起動時に自動で導入されます。3 つともプラグインを有効にしています。
+`genshijin` は `SessionStart` フックから毎セッション起動し、応答を圧縮した
+口調へ切り替えます。`mattpocock` の `research` スキルは、`CLAUDE.md` の運用
+ルールで技術調査の入口に指定しています。ステータスラインは `statusline-command.sh` を呼び出し、その中で `jq` を
 使います。`jq` は macOS 15 以降に標準搭載されているため、別途の導入は不要です。
 
-`skillOverrides` で `commit-msg`、`en-comment`、`tech-research` を
-`user-invocable-only` にしています。スキルの description は常にコンテキストへ
+`skillOverrides` で `tech-research` を `user-invocable-only` にしています。スキルの description は常にコンテキストへ
 読み込まれるため、自動起動させたくないものはこの指定で `/` からの明示的な
 呼び出しだけに限定します。この指定が対象にするのはローカルスキルだけで、
 プラグインとして導入したスキルでは無視されます。
@@ -275,6 +284,7 @@ Visual Studio Code 本体と拡張は手順 3 の cask および `vscode` エン
 ### Visual Studio Code
 
 - `Shift + Space` で入力候補を表示する
+- `Command + ;` でエディタを拡大する（既定の `Command + テンキーの +` は外す）
 - キーの物理位置を基準に判定する設定を追加する
 
 ## 動作確認

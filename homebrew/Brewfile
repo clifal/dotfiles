@@ -1,9 +1,14 @@
+tap "hashicorp/tap"
+# GIF image/animation creator/editor
+brew "gifsicle"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
 # Rust toolchain installer
 brew "rustup"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
+# Terraform
+brew "hashicorp/tap/terraform", trusted: true
 # Audio utility
 cask "background-music"
 # Terminal-based AI coding assistant
@@ -26,6 +31,8 @@ cask "shottr"
 cask "slack"
 # Music streaming service
 cask "spotify"
+# Enable Windows-like program quitting when all windows are closed
+cask "swift-quit"
 # Open-source code editor
 cask "visual-studio-code"
 vscode "anthropic.claude-code"
@@ -39,6 +46,7 @@ vscode "charliermarsh.ruff"
 vscode "christian-kohler.path-intellisense"
 vscode "chrmarti.regex"
 vscode "davidanson.vscode-markdownlint"
+vscode "emeraldwalk.runonsave"
 vscode "esbenp.prettier-vscode"
 vscode "gxl.git-graph-3"
 vscode "hashicorp.terraform"

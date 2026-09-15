@@ -7,3 +7,6 @@
 
 [core]
 	excludesfile = ~/.gitignore-global
+	editor = code --wait
+[sequence]
+	editor = code --wait

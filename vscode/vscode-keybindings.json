@@ -1,7 +1,16 @@
+// 既定値を上書きするには、このファイル内にキー バインドを挿入します
 [
   {
     "key": "shift+space",
     "command": "editor.action.triggerSuggest",
     "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+;",
+    "command": "workbench.action.zoomIn"
+  },
+  {
+    "key": "cmd+numpad_add",
+    "command": "-workbench.action.zoomIn"
   }
 ]

@@ -1,7 +1,7 @@
 ---
 name: compress-doc
 description: 指定した日本語ドキュメントを、技術的な中身を残したまま元の85〜90%の文字数へ再構成する。
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # compress-doc
