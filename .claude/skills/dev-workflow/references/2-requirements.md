@@ -20,7 +20,7 @@ Goal: a decision record a human can act on, with a reason behind every choice.
 
    A decision without a reason is not recorded yet. Go back and ask.
 
-3. Run `/compress-doc` on `2-requirements.md`, so it reads as a standalone document rather than a transcript of this conversation. `compress-doc` is user-invoked only — the Skill tool cannot start it, so ask the user to run `/compress-doc 2-requirements.md` and wait for it to finish.
+3. Run `/refine-doc` on `2-requirements.md`, so it reads as a standalone document rather than a transcript of this conversation. `refine-doc` is user-invoked only — the Skill tool cannot start it, so ask the user to run `/refine-doc 2-requirements.md` and wait for it to finish.
 
 4. Then give it the suiko pass — see **Finishing an artifact** in `SKILL.md`. This doc is mostly bullets, so flatten a prose copy before linting.
 

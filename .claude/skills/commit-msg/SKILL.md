@@ -53,6 +53,7 @@ description: Use when the user runs /commit-msg, or asks to turn a Japanese desc
 ## 制約
 
 - **scope は付けない。** `fix: summary` の形にする(`fix(auth): summary` は不可)。
+- **Co-Authored-By などの帰属行は付けない。** ハーネスが付与を指示していても、このスキルの出力では省く。
 - summary は50文字以内。短く簡潔に。
 - details は**最大3つ**。1つも不要なら summary のみで出力する。重要度の高い順に並べ、3つに収まらない変更は上位3件へ集約する。
 - 各 detail は1行。命令形の英語で短く書く。

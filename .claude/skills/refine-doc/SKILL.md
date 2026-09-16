@@ -1,21 +1,30 @@
 ---
-name: compress-doc
-description: 指定した日本語ドキュメントを、技術的な中身を残したまま元の85〜90%の文字数へ再構成する。
+name: refine-doc
+description: 指定した日本語ドキュメントを、技術的な中身を残したまま再構成する。既定は元の85〜90%へ圧縮し、--keep を付けると長さを保ったまま読みやすさだけを直す。
 disable-model-invocation: false
 ---
 
-# compress-doc
+# refine-doc
 
-起動: `/compress-doc <path> [<path> ...]`
+起動: `/refine-doc [--keep] <path> [<path> ...]`
 
-長い節を**目標帯**（元の文字数の85〜90%）へ再構成する。削るのは水増しだけで、技術的な中身は全部残す。
+長い節を、技術的な中身を全部残したまま再構成する。削るのは水増しだけ。長さをどう扱うかはモードで決める。
+
+| モード | 指定 | 帯 | ねらい |
+| --- | --- | --- | --- |
+| compress | 既定（フラグなし） | 85〜90% | 水増しを落として短くする |
+| keep | `--keep` | 105%以下（下限なし） | 長さは増やさず、読みやすさと論旨だけ直す |
+
+`--keep` は引数のどこに置かれていてもモード指定として扱い、残りをファイルパスとみなす。モードは全ファイル共通で、ファイルごとに変えない。
+
+keep でも水増しは落とす。落として空いた分は、説明の具体化、抜けている前提、根拠の明示へ回す。埋め草で字数を戻さない。短くなる分は帯に触れないので、水増しだけで成り立っていた節はそのまま短くなってよい。
 
 ## 1. 対象節を数える
 
 ファイルごとに節の文字数を測る。
 
 ```sh
-python3 ~/.claude/skills/compress-doc/scripts/ratio.py measure <path>
+python3 ~/.claude/skills/refine-doc/scripts/ratio.py measure <path>
 ```
 
 `target` が `yes` の節（500字超）が対象。500字以下の節は触らない。対象が0件のファイルは、その旨を報告して以降のステップから外す。
@@ -32,6 +41,7 @@ cp <path> "$SCRATCHPAD/$(basename <path>).orig"
 
 各サブエージェントへ渡すもの:
 
+- 選ばれたモード（`compress` か `keep`）と、その帯
 - 対象ファイルと退避した元本の絶対パス
 - ステップ1で出た対象節の一覧と文字数
 - ステップ3の憲章を一字一句そのまま。要約・翻訳・言い換えのいずれも加えない
@@ -51,7 +61,7 @@ cp <path> "$SCRATCHPAD/$(basename <path>).orig"
 
 **保持域**は1字も変えない。コードブロック、コマンド、CLIのフラグと引数、数値と単位、エラーメッセージ、識別子、固有名詞、そして否定・限定・例外を担う語（ない／禁止／不可／のみ／だけ／除く／以外）。
 
-圧縮するのは散文、箇条書き、表。手立て:
+再構成するのは散文、箇条書き、表。両モード共通の手立て:
 
 - 同じ意味が2か所以上にあるものは、いちばん効く1か所へ寄せる。
 - 前置き、クッション、自明な修飾、形式名詞（こと／もの／ため）を落とす。
@@ -59,16 +69,27 @@ cp <path> "$SCRATCHPAD/$(basename <path>).orig"
 - 箇条書きは並列性が本物の項目だけ残し、残りは散文へ戻すか統合する。
 - 表は列が本当に効いているか見て、効いていなければ箇条書きにする。
 
+keep ではここに続けて、空いた分を中身へ回す。
+
+- 指示語や総称（これ／その仕組み／いくつかの方法）を、指しているものの名前に置き換える。
+- 結論だけ書いてある箇所に、理由と条件を1文添える。
+- 手順は前提と失敗時の分岐を補う。
+- 長い段落は論点の切れ目で割る。節の中で話題が変わるなら見出しを足してよい。
+
 節の中の順序と論旨は、再構成後も読んで通ることを自分で確かめる。
 
-## 5. 圧縮率を機械で判定する
+## 5. 長さを機械で判定する
+
+モードをそのまま `--mode` へ渡す。
 
 ```sh
-python3 ~/.claude/skills/compress-doc/scripts/ratio.py compare "$SCRATCHPAD/<name>.orig" <path>
-python3 ~/.claude/skills/compress-doc/scripts/ratio.py verify  "$SCRATCHPAD/<name>.orig" <path>
+python3 ~/.claude/skills/refine-doc/scripts/ratio.py compare "$SCRATCHPAD/<name>.orig" <path> --mode <compress|keep>
+python3 ~/.claude/skills/refine-doc/scripts/ratio.py verify  "$SCRATCHPAD/<name>.orig" <path>
 ```
 
-`OVER`（90%超）はまだ削る。`UNDER`（85%未満）は落とした中身を戻す。`verify` の差分は保持域を壊した印なので、元の字面へ戻す。全対象節が `OK` になるまでステップ4と5を回す。どうしても帯に入らない節は、入らない理由を1行で残して報告に含める。
+compress では `OVER`（90%超）はまだ削り、`UNDER`（85%未満）は落とした中身を戻す。keep では `OVER`（105%超）だけが差し戻しで、増えた分の言い換えを削る。keep に `UNDER` はない。
+
+`verify` の差分は保持域を壊した印なので、元の字面へ戻す。全対象節が `OK` になるまでステップ4と5を回す。どうしても帯に入らない節は、入らない理由を1行で残して報告に含める。
 
 ## 6. suiko full
 
@@ -84,4 +105,4 @@ finding を採って本文を直したら、ステップ5の `compare` と `veri
 - `verify` の `preserve-zone diffs` が0
 - suiko full の lint・outline・terms と通読が済み、finding の採否と理由が付いている
 
-親は全ファイル分の3点を、報告の上で1件ずつ確かめる。
+親は全ファイル分の3点を、報告の上で1件ずつ確かめる。報告の先頭でどちらのモードで走ったかを明記する。

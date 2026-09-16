@@ -165,10 +165,14 @@ Claude Code の起動時に自動で導入されます。3 つともプラグイ
 ルールで技術調査の入口に指定しています。ステータスラインは `statusline-command.sh` を呼び出し、その中で `jq` を
 使います。`jq` は macOS 15 以降に標準搭載されているため、別途の導入は不要です。
 
-`skillOverrides` で `tech-research` を `user-invocable-only` にしています。スキルの description は常にコンテキストへ
-読み込まれるため、自動起動させたくないものはこの指定で `/` からの明示的な
-呼び出しだけに限定します。この指定が対象にするのはローカルスキルだけで、
-プラグインとして導入したスキルでは無視されます。
+`skillOverrides` は現在すべて既定のままです。スキルの description は常にコンテキストへ
+読み込まれるため、自動起動させたくないものは `"<スキル名>": "user-invocable-only"` を
+足して `/` からの明示的な呼び出しだけに限定できます。この指定が対象にするのは
+ローカルスキルだけで、プラグインとして導入したスキルでは無視されます。
+
+`permissions.defaultMode` は `auto` です。ツールの実行許可を毎回確認せずに
+進めます。共有マシンや業務用の環境へそのまま持ち込む場合は、この項目を
+外すか `default` へ戻してください。
 
 #### スキル
 
@@ -176,13 +180,13 @@ Claude Code の起動時に自動で導入されます。3 つともプラグイ
 
 - `ax` — HTML の取得と構造化抽出を `ax` CLI で行う
 - `commit-msg` — 変更内容の日本語説明から Conventional Commits のメッセージを作る
-- `compress-doc` — 日本語ドキュメントを、中身を残したまま圧縮する
 - `dev-workflow` — 理解から実装、コードレビューまで人手の確認を挟んで進める
 - `en-comment` — 日本語をプログラミング用の英語コメントへ訳す
 - `pair` — 開発者が手を動かす前提でペアプログラミングの相方を務める
+- `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
+- `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
 - `show-me` — 図やコードのスケッチで話題を視覚的に説明する
 - `suiko` — 日本語文書の不自然さと読解負荷を診断して直す
-- `tech-research` — 一次ソースを検証して技術動向のレポートを作る
 
 `archify`（アーキテクチャ図の生成）は約 7 MB あるため `.gitignore` で除外し、
 上のコピーには含まれません。
@@ -326,8 +330,8 @@ Karabiner-EventViewerで次を確認できます。
   （MIT。`Cocoon-AI/architecture-diagram-generator` から派生している。手順 8 の
   とおり収録していないので、配布元から取得する）
 
-残る `commit-msg`、`compress-doc`、`dev-workflow`、`en-comment`、`pair`、
-`tech-research` は自作で、配布元はありません。
+残る `commit-msg`、`dev-workflow`、`en-comment`、`pair`、`refine-doc`、
+`research-plan` は自作で、配布元はありません。
 
 `suiko` が使う textlint 一式は収録せず、`scripts/run-textlint-ai-writing.sh` が実行の
 たびに npm の一時環境へ取得します。バージョンはスクリプト内で固定しています。

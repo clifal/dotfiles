@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""節ごとの文字数・圧縮率・保持域の一致を機械的に判定する。
+"""節ごとの文字数・長さの帯・保持域の一致を機械的に判定する。
 
 usage:
   ratio.py measure <file>
-  ratio.py compare <before> <after>
+  ratio.py compare <before> <after> [--mode compress|keep]
   ratio.py verify  <before> <after>
+
+モード:
+  compress  85〜90% の帯へ収める（既定）
+  keep      105% を上限とし、下限は課さない
 """
 import re
 import sys
@@ -14,6 +18,12 @@ HEADING = re.compile(r"^(#{1,6})\s+(.*)$")
 INLINE_CODE = re.compile(r"`[^`\n]+`")
 NUMBER = re.compile(r"\d+(?:\.\d+)?")
 SPACE = re.compile(r"\s+")
+
+# (下限, 上限)。下限 None は「短くなる分は問わない」。
+BANDS = {
+    "compress": (0.85, 0.90),
+    "keep": (None, 1.05),
+}
 
 
 def split_sections(text):
@@ -40,7 +50,7 @@ def split_sections(text):
 
 
 def countable(body_lines):
-    """圧縮対象の文字数。インラインコードと空白は数えない。"""
+    """対象の文字数。インラインコードと空白は数えない。"""
     text = "\n".join(body_lines)
     text = INLINE_CODE.sub("", text)
     return len(SPACE.sub("", text))
@@ -66,13 +76,25 @@ def index(sections):
     return idx
 
 
-def compare(before_path, after_path):
+def band_label(mode):
+    lo, hi = BANDS[mode]
+    if lo is None:
+        return f"<= {hi*100:.0f}%"
+    return f"{lo*100:.0f}-{hi*100:.0f}%"
+
+
+def compare(before_path, after_path, mode="compress"):
+    if mode not in BANDS:
+        print(f"unknown mode: {mode} (expected: {', '.join(BANDS)})")
+        return 2
+    lo, hi = BANDS[mode]
     with open(before_path, encoding="utf-8") as f:
         before = split_sections(f.read())
     with open(after_path, encoding="utf-8") as f:
         after = split_sections(f.read())
     after_idx = index(after)
     ng = 0
+    print(f"mode: {mode}  band: {band_label(mode)}")
     print(f"{'before':>7} {'after':>7} {'ratio':>7}  {'verdict':<10} section")
     for s in before:
         b = countable(s["body"])
@@ -85,16 +107,16 @@ def compare(before_path, after_path):
             continue
         a = countable(hits.pop(0)[1]["body"])
         ratio = a / b
-        if ratio > 0.90:
+        if ratio > hi:
             verdict = "OVER"
-        elif ratio < 0.85:
+        elif lo is not None and ratio < lo:
             verdict = "UNDER"
         else:
             verdict = "OK"
         if verdict != "OK":
             ng += 1
         print(f"{b:>7} {a:>7} {ratio*100:>6.1f}%  {verdict:<10} {s['title']}")
-    print(f"\nsections outside the 85-90% band: {ng}")
+    print(f"\nsections outside the {band_label(mode)} band: {ng}")
     return 1 if ng else 0
 
 
@@ -139,18 +161,44 @@ def verify(before_path, after_path):
     return 1 if ng else 0
 
 
+def parse_mode(args):
+    """--mode <name> / --mode=<name> を取り出し、残りの引数を返す。"""
+    mode = "compress"
+    rest = []
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a == "--mode":
+            if i + 1 >= len(args):
+                return None, rest
+            mode = args[i + 1]
+            i += 2
+            continue
+        if a.startswith("--mode="):
+            mode = a.split("=", 1)[1]
+            i += 1
+            continue
+        rest.append(a)
+        i += 1
+    return mode, rest
+
+
 def main():
     if len(sys.argv) < 3:
         print(__doc__.strip())
         return 2
     cmd = sys.argv[1]
-    if cmd == "measure":
-        measure(sys.argv[2])
+    mode, rest = parse_mode(sys.argv[2:])
+    if mode is None:
+        print(__doc__.strip())
+        return 2
+    if cmd == "measure" and len(rest) >= 1:
+        measure(rest[0])
         return 0
-    if cmd == "compare":
-        return compare(sys.argv[2], sys.argv[3])
-    if cmd == "verify":
-        return verify(sys.argv[2], sys.argv[3])
+    if cmd == "compare" and len(rest) >= 2:
+        return compare(rest[0], rest[1], mode)
+    if cmd == "verify" and len(rest) >= 2:
+        return verify(rest[0], rest[1])
     print(__doc__.strip())
     return 2
 

@@ -1,8 +1,6 @@
 {
   "model": "opus[1m]",
-  "skillOverrides": {
-    "tech-research": "user-invocable-only"
-  },
+  "skillOverrides": {},
   "hooks": {
     "SessionStart": [
       {
@@ -46,5 +44,8 @@
   },
   "effortLevel": "high",
   "theme": "dark",
-  "switchModelsOnFlag": false
+  "switchModelsOnFlag": false,
+  "permissions": {
+    "defaultMode": "auto"
+  }
 }
