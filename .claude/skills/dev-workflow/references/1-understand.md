@@ -6,9 +6,9 @@ Goal: the user can explain the code the feature touches without opening it.
 
 1. **Scope it.** Ask which subsystem, package, or paths the feature touches. A narrow scope reads better than a whole-repo sweep; widen only when the answer forces it.
 
-2. Call the Skill tool for `understand-anything:understand` on that scope. It builds the knowledge graph.
+2. **Read the scope.** Fan out `Explore` agents across those paths to locate the entry points, the main flow, and the data structures the area owns. Treat what they return as a map, not an answer — open the files they point at and read them.
 
-3. Write `1-understanding.md`. Prose, not a graph dump:
+3. Write `1-understanding.md`. Prose, not a file listing:
    - what the area does today, and where it starts (entry points, with `file:line`)
    - how data moves through it
    - the constraints the new feature inherits: schemas, contracts, invariants, deliberate ADR decisions

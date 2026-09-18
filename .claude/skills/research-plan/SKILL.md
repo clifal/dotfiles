@@ -1,6 +1,6 @@
 ---
 name: research-plan
-description: 調査エージェントに渡す依頼書（plan.md）をテンプレートから作る。ユーザーが「〜について調べたい」と言って調査を始める前、調査計画・調査依頼書・リサーチブリーフを作りたいとき、research/TEMPLATE.md を埋めたいとき、mattpocock-skills:research に渡す入力を用意したいときに使う。調査の実行そのものには使わない。
+description: 調査エージェントに渡す依頼書（plan.md）をテンプレートから作る。ユーザーが「〜について調べたい」と言って調査を始める前、調査計画・調査依頼書・リサーチブリーフを作りたいとき、research/TEMPLATE.md を埋めたいとき、research に渡す入力を用意したいときに使う。調査の実行そのものには使わない。
 ---
 
 # リサーチ依頼書の作成
@@ -68,6 +68,6 @@ RQ 案はこちらで書いてユーザーに見せる。ゼロから書かせ�
 
 書き出したパスと、起動方法をユーザーに伝える。
 
-- 単発の調査 → `mattpocock-skills:research`。`research/<topic>/plan.md に従って調査して` で起動する
+- 単発の調査 → `mattpocock-skills:research`（`mattpocock-skills` プラグインの skill）。`research/<topic>/plan.md に従って調査して` で起動する
 
 調査の実行はこの skill の範囲外。依頼書を書き終えたら止まり、起動するかをユーザーに確認する。

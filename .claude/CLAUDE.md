@@ -6,10 +6,12 @@
 
 ## Skill 起動ポリシー
 
-skill の自動起動を許可する。`genshijin` の SessionStart フックによる起動を含む。
+skill の自動起動を許可する。
+
+ただし `genshijin:genshijin` skill は Skill ツールで呼ばない。SessionStart フックが `skills/genshijin/SKILL.md` の全文をセッション冒頭のコンテキストに注入済みで、Skill ツールから呼ぶと同じ内容を二重に読み込むことになる。強度レベルを切り替えたいときだけ `/genshijin` コマンドを使う。
 
 ### 用途別の起動指示
 
 - **明晰な文章を書くとき** — 解説文、記事、章、ドキュメント本文などを執筆・推敲する場合は `suiko` を `full` モードで使い、`lint`・`outline`・`terms` と目視レビューをすべて通して一読で理解できる本文にする。`suiko lint` は `--experimental` を付けて実験的検出器も有効にし、増えた finding は採否を自分で判断する。チャットでの応答自体は対象外で、そちらは genshijin の圧縮を優先する。
 - **web からデータを収集するとき** — `ax` CLI を使う。curl と使い捨てのパーススクリプトを組み合わせたり、HTML に正規表現をかけたりしない。
-- **技術情報を調査するとき** — `mattpocock-skills:research` skill を使い、背景エージェントに調査させる。公式ドキュメント、ソースコード、仕様、一次 API といった一次情報源に当たり、二次的な解説記事で代替しない。調査結果は出典付きで Markdown ファイルに記録する。
+- **技術情報を調査するとき** — `mattpocock-skills:research` skill（`mattpocock-skills` プラグイン）を使い、背景エージェントに調査させる。公式ドキュメント、ソースコード、仕様、一次 API といった一次情報源に当たり、二次的な解説記事で代替しない。調査結果は出典付きで Markdown ファイルに記録する。

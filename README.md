@@ -157,18 +157,45 @@ cp -R .claude/skills ~/.claude/
 既に `~/.claude/settings.json` がある場合、上のコマンドは既存の設定を破棄します。
 内容を確認し、必要な項目を手でマージしてください。
 
-`settings.json` には 3 つのマーケットプレイス（`genshijin`、
-`understand-anything`、`mattpocock`）とプラグインの有効化設定が含まれており、
-Claude Code の起動時に自動で導入されます。3 つともプラグインを有効にしています。
-`genshijin` は `SessionStart` フックから毎セッション起動し、応答を圧縮した
-口調へ切り替えます。`mattpocock` の `research` スキルは、`CLAUDE.md` の運用
-ルールで技術調査の入口に指定しています。ステータスラインは `statusline-command.sh` を呼び出し、その中で `jq` を
+`settings.json` にはマーケットプレイス `genshijin` とプラグインの有効化設定が
+含まれており、Claude Code の起動時に自動で導入されます。`genshijin` は
+`SessionStart` フックから毎セッション起動し、応答を圧縮した口調へ切り替えます。
+このフックがスキル本文をそのままコンテキストへ流すので、`CLAUDE.md` では
+Skill ツールからの二重の読み込みを禁じています。
+
+`mattpocock-skills` も `enabledPlugins` に入っています。公式のマーケットプレイスに
+収録されているため、`extraKnownMarketplaces` への追記は要りません。更新は
+`claude plugin update mattpocock-skills` で取り込めます。
+
+以前は使う 10 スキルを `.claude/skills/` へ取り込んでいました。上流の更新が届かず、
+自作スキルとの区別も付かなくなるため、プラグインへ戻しています。取り込んだ分は
+消しました。常時コンテキストを占める 25 スキルの description は約 1,600 トークンです。
+内訳は `claude plugin details mattpocock-skills` で見られます。
+
+`understand-anything` も入れていましたが、使わないスキルの description が毎ターンの
+コンテキストを占めていたため、プラグインとマーケットプレイスの登録ごと削除して
+います。取り込んでもいないので、使いたくなったら配布元から入れ直してください。
+キャッシュに残っていた旧バージョンが 510 MB の `node_modules` を抱えていたため、
+削除で 590 MB ほど空いています。
+
+ステータスラインは `statusline-command.sh` を呼び出し、その中で `jq` を
 使います。`jq` は macOS 15 以降に標準搭載されているため、別途の導入は不要です。
 
 `skillOverrides` は現在すべて既定のままです。スキルの description は常にコンテキストへ
 読み込まれるため、自動起動させたくないものは `"<スキル名>": "user-invocable-only"` を
 足して `/` からの明示的な呼び出しだけに限定できます。この指定が対象にするのは
 ローカルスキルだけで、プラグインとして導入したスキルでは無視されます。
+
+`syncClaudeAiSkills` は `false` です。claude.ai で有効にしたスキルの同期を止めます。
+`docs` や `docx` など 8 つが同期されていましたが、一度も使わないまま毎ターンの
+コンテキストを占めていました。手元から消しても次の同期で戻るため、同期そのものを
+切っています。既に降りてきた分は次回の起動で `~/.claude/skills/.trash` へ移り、
+`cleanupPeriodDays` の経過後に消えます。claude.ai 側で新しいスキルを有効にしても
+降りてこなくなるので、使いたくなったらこの項目を外してください。
+
+`cleanupPeriodDays` は `30` です。既定と同じ値ですが、会話ログと
+`~/.claude/skills/.trash` の保持期間として明示しています。`~/.claude/projects/` の
+会話ログは放っておくと数百 MB まで育ちます。短くしたいときは値を減らしてください。
 
 `permissions.defaultMode` は `auto` です。ツールの実行許可を毎回確認せずに
 進めます。共有マシンや業務用の環境へそのまま持ち込む場合は、この項目を
@@ -187,6 +214,15 @@ Claude Code の起動時に自動で導入されます。3 つともプラグイ
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
 - `show-me` — 図やコードのスケッチで話題を視覚的に説明する
 - `suiko` — 日本語文書の不自然さと読解負荷を診断して直す
+
+`dev-workflow` は `disable-model-invocation: true` で、`/dev-workflow` から明示的に
+呼んだときだけ動きます。
+
+`dev-workflow` の各フェーズは `mattpocock-skills` プラグインのスキルへ渡します。
+プラグインのスキルは名前空間付きで呼びます。そのため `/mattpocock-skills:grill-with-docs`
+の形で書いてあります。同名のローカルスキルがない限り `/grill-with-docs` でも通ります。
+フェーズ 3 以降は `docs/agents/issue-tracker.md` が要ります。これは
+`/mattpocock-skills:setup-matt-pocock-skills` が作ります。
 
 `archify`（アーキテクチャ図の生成）は約 7 MB あるため `.gitignore` で除外し、
 上のコピーには含まれません。
@@ -317,7 +353,7 @@ Karabiner-EventViewerで次を確認できます。
 
 ## スキルの配布元
 
-`.claude/skills/` のうち次の 4 つは外部のリポジトリが配布元です。入っているのは
+`.claude/skills/` のうち次のものは外部のリポジトリが配布元です。入っているのは
 取り込み時点の内容で、上流の更新は反映されません。更新時は配布元と差分を
 確認してください。
 
@@ -332,6 +368,12 @@ Karabiner-EventViewerで次を確認できます。
 
 残る `commit-msg`、`dev-workflow`、`en-comment`、`pair`、`refine-doc`、
 `research-plan` は自作で、配布元はありません。
+
+https://github.com/mattpocock/skills （MIT）の 25 スキルは `.claude/skills/` へは
+置きません。手順 8 の `enabledPlugins` にある `mattpocock-skills` プラグインとして
+入れています。実体は `~/.claude/plugins/cache/` にあり、リポジトリには入りません。
+`dev-workflow` が渡す `grill-with-docs`、`to-spec`、`to-tickets`、`implement`、
+`code-review`、`setup-matt-pocock-skills` はここから来ます。
 
 `suiko` が使う textlint 一式は収録せず、`scripts/run-textlint-ai-writing.sh` が実行の
 たびに npm の一時環境へ取得します。バージョンはスクリプト内で固定しています。

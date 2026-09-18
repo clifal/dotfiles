@@ -1,6 +1,7 @@
 {
   "model": "opus[1m]",
   "skillOverrides": {},
+  "syncClaudeAiSkills": false,
   "hooks": {
     "SessionStart": [
       {
@@ -19,26 +20,13 @@
   },
   "enabledPlugins": {
     "genshijin@genshijin": true,
-    "understand-anything@understand-anything": true,
-    "mattpocock-skills@mattpocock": true
+    "mattpocock-skills@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "genshijin": {
       "source": {
         "source": "github",
         "repo": "InterfaceX-co-jp/genshijin"
-      }
-    },
-    "understand-anything": {
-      "source": {
-        "source": "github",
-        "repo": "Egonex-AI/Understand-Anything"
-      }
-    },
-    "mattpocock": {
-      "source": {
-        "source": "github",
-        "repo": "mattpocock/skills"
       }
     }
   },
@@ -47,5 +35,6 @@
   "switchModelsOnFlag": false,
   "permissions": {
     "defaultMode": "auto"
-  }
+  },
+  "cleanupPeriodDays": 30
 }

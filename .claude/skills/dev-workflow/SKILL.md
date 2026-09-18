@@ -64,10 +64,12 @@ Before starting anything, look for existing `docs/dev-workflow/*/state.md`. If a
 
 ## Handing off to user-invoked skills
 
-`grill-with-docs`, `to-spec`, `to-tickets`, and `implement` are user-invoked: you cannot fire them. When a phase calls for one, print the exact command on its own line, say what to feed it, and stop. Pick the work back up when the user returns.
+`grill-with-docs`, `to-spec`, `to-tickets`, and `implement` come from the `mattpocock-skills` plugin, and they are user-invoked: you cannot fire them. When a phase calls for one, print the exact command on its own line, say what to feed it, and stop. Pick the work back up when the user returns.
 
 ```
 /mattpocock-skills:grill-with-docs
 ```
+
+The namespaced form always resolves. A bare `/grill-with-docs` also works while no local skill shares the name.
 
 From phase 3 on, those skills need `docs/agents/issue-tracker.md`. If it is missing, hand off `/mattpocock-skills:setup-matt-pocock-skills` first.
