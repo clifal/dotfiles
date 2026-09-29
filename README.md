@@ -361,10 +361,21 @@ Karabiner-EventViewerで次を確認できます。
   （`npx skills add yusukebe/ax` で導入。CLI も同じリポジトリ）
 - `show-me` — https://github.com/humanlayer/skills
 - `suiko` — https://github.com/nwiizo/suiko
-  （`cargo install suiko` で入る CLI と同じリポジトリ）
+  （`cargo install suiko` で入る CLI と同じリポジトリ。textlint の `ai-words-ja`
+  preset と `scripts/textlint-ai-writing.rc.json` は手元で足した変更で、上流には
+  ない）
 - `archify` — https://github.com/tt-a1i/archify
   （MIT。`Cocoon-AI/architecture-diagram-generator` から派生している。手順 8 の
-  とおり収録していないので、配布元から取得する）
+  とおり収録していないので、次のコマンドで配布元から取得する）
+
+```sh
+npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --copy --yes
+```
+
+`npx skills update -g` は `suiko` を上流の内容で置き換え、`~/.claude/skills/suiko` を
+`~/.agents/skills/suiko` へのシンボリックリンクに差し替えます。手元で足した変更は
+消えます。更新するときは上流版を取得したあと、`git show ad72fda -- .claude/skills/suiko`
+のパッチを当て直してから、実体のディレクトリとして `~/.claude/skills/` へ戻してください。
 
 残る `commit-msg`、`dev-workflow`、`en-comment`、`pair`、`refine-doc`、
 `research-plan` は自作で、配布元はありません。
