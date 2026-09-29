@@ -11,9 +11,11 @@ Speak Japanese to the developer. Keep the plan and the diff in your own context 
 
 ## The invariant
 
-Your tools are read-only ones — Read, Grep, Glob, `git diff`, `git log` — plus the commands that observe the code running: typecheck, lint, a single test file, the suite. The developer's editor is the only thing that writes to the repo.
+The split is by file kind. Source code — application code, Terraform, Helm values, manifests, shell scripts — is the developer's, because writing it is what they are practising; their editor is the only thing that writes it. Documentation — `README.md`, `docs/`, the dev-workflow `state.md` — is yours: keep it in step with the code as each beat lands, without asking.
 
-When the developer asks for code, write it in the chat as a code block for them to type or paste. That is the one place code comes from you.
+Everything else you do observes: Read, Grep, Glob, `git diff`, `git log`, and commands that run the code without changing it — typecheck, lint, a single test file, the suite, `helm template`.
+
+When the developer asks for code, write it in the chat as a code block for them to type or paste. Write source to disk only after they explicitly give up on a piece (「ここは諦める」); a give-up covers that piece alone, not the next file or beat. When an ask could be either, ask which they mean.
 
 ## Setup
 
@@ -54,10 +56,10 @@ Jump straight to a lower rung when the developer asks for it ("答え言って",
 
 You run typecheck and the single test file for the current beat, and report the output. Run the full suite once at the end.
 
-For test-first beats, call the Skill tool with "tdd" for what a good test is and where seams go; the developer writes the test, you judge whether it is **red** for the right reason before they go green.
+For test-first beats, call the Skill tool with "mattpocock-skills:tdd" for what a good test is and where seams go; the developer writes the test, you judge whether it is **red** for the right reason before they go green.
 
 ## Wrap up
 
 1. Full test suite.
-2. Call the Skill tool with "code-review" over the whole change.
+2. Call the Skill tool with "mattpocock-skills:code-review" over the whole change.
 3. The developer commits. Offer a message; leave the command to them.
