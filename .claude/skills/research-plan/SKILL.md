@@ -11,7 +11,7 @@ description: 調査エージェントに渡す依頼書（plan.md）を research
 
 ## ステップ1 — テンプレートの確保とトピック ID
 
-1. 作業ディレクトリの `research/TEMPLATE.md` を読む。プロジェクト側のカスタマイズを優先するためで、無ければこの skill の `TEMPLATE.md` をそこへコピーしてから読む。
+1. 作業ディレクトリの `research/TEMPLATE.md` と `research/FINDINGS_TEMPLATE.md` を読む。プロジェクト側のカスタマイズを優先するためで、無いほうはこの skill の同名ファイルをそこへコピーしてから読む。調査エージェントは依頼書から `research/FINDINGS_TEMPLATE.md` を参照するので、2 つとも揃える。
 2. トピック ID を英小文字ケバブケース 3 語程度で 1 つ提案し、ユーザーの確認を取る。
 3. `research/<topic>/` が既にあれば、`plan.md` と `findings.md` を読む。`brief.md` は `plan.md` の旧名なので、あれば読み、書き出しは `plan.md` へ行って `brief.md` は残す。既存トピックの追加調査は既存 `plan.md` への追記で足りることが多いので、新規と追記のどちらにするかをユーザーに確認する。
 
@@ -65,5 +65,6 @@ description: 調査エージェントに渡す依頼書（plan.md）を research
 書き出したパスと、起動方法をユーザーに伝える。
 
 - 単発の調査 → `mattpocock-skills:research`（`mattpocock-skills` プラグインの skill）。`research/<topic>/plan.md に従って調査して` で起動する
+- 調査結果を受け取った後の仕上げ（保存、規約の確認、refine-doc）は `FINDINGS_TEMPLATE.md` の「書き上げ後の仕上げ」にある。起動時にユーザーへこの手順も伝える
 
 この skill の仕事は依頼書を書き終えるところまでで、調査は別の skill が担う。書き終えたら止まり、起動するかをユーザーに確認する。
