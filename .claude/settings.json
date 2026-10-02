@@ -1,19 +1,12 @@
 {
+  "cleanupPeriodDays": 30,
+  "syncClaudeAiSkills": false,
+  "permissions": {
+    "defaultMode": "auto"
+  },
   "model": "opus[1m]",
   "skillOverrides": {},
-  "syncClaudeAiSkills": false,
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"セッション開始時、最初の応答前に Skill ツールで genshijin:genshijin を呼び出し、原始人モード(強度:通常)を有効化せよ。\"}}'"
-          }
-        ]
-      }
-    ]
-  },
+  "hooks": {},
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
@@ -32,9 +25,5 @@
   },
   "effortLevel": "high",
   "theme": "dark",
-  "switchModelsOnFlag": false,
-  "permissions": {
-    "defaultMode": "auto"
-  },
-  "cleanupPeriodDays": 30
+  "switchModelsOnFlag": false
 }
