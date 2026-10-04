@@ -42,19 +42,9 @@ At each gate, append one line to the `## Log` naming what was decided, and set `
 
 ## Finishing an artifact
 
-An artifact written in Japanese gets a `suiko` pass before its gate: call the Skill tool for `suiko`, `quick` for the short docs and `full` once one runs past roughly 10,000 characters or leaves the team.
+An artifact written in Japanese gets a yomiyasu pass before its gate: call the Skill tool for `yomiyasu:yomiyasu` (`/yomiyasu:yomiyasu`) with the file path, `--full`, and `--domain tech`. Write its rewritten body back to the file.
 
-Lint with the experimental detectors on:
-
-```sh
-suiko lint <file> --genre tech --reading-load --experimental --json
-```
-
-`--experimental` turns on the uncalibrated detectors. It raises the finding count, which is fine — you judge each one anyway.
-
-`suiko lint` does not read bullet lines. A doc that is mostly bullets lints as a handful of fragments and comes back with false positives, so read `doc_char_count`, `readability.particle_token_ratio`, and `lexical_diversity.skipped_too_short` before trusting any finding. When the character count sits far below the real doc, strip the markers into a prose copy and lint that; the fixes still land in the original.
-
-Judge each finding rather than clearing it. A term the spec fixed, or a list that is flat because the items are genuinely parallel, stays as it is.
+Judge each change rather than accepting it wholesale. A term the spec fixed, or a list that is flat because the items are genuinely parallel, stays as it is.
 
 `state.md`, the diagrams, and artifacts written in English skip this pass.
 

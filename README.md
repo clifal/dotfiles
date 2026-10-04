@@ -74,7 +74,7 @@ exec $SHELL -l
 含まれます。`.zshrc` は interactive shell でしか読まれないため、Claude Code の
 ような non-interactive shell からは反映されません。そのため `.zshenv` で
 `~/.cargo/bin`、`~/.local/bin`、mise の shims ディレクトリを PATH へ追加して
-います。手順 8 のスキルが使う `suiko` や `ax` の解決に必要です。
+います。手順 8 のスキルが使う `ax` の解決に必要です。
 
 ### 5. mise
 
@@ -167,6 +167,13 @@ Skill ツールからの二重の読み込みを禁じています。
 収録されているため、`extraKnownMarketplaces` への追記は要りません。更新は
 `claude plugin update mattpocock-skills` で取り込めます。
 
+`yomiyasu` は日本語の文章を読みやすく書き直すスキルのプラグインで、
+`extraKnownMarketplaces` に登録した `nanaism/yomiyasu` から入ります。`CLAUDE.md` は
+文章を書くときに `yomiyasu:yomiyasu` を `--full` 付きで使うよう指示しており、
+`refine-doc` と `dev-workflow` も仕上げで呼び出します。以前は `suiko` を使って
+いましたが、2 つの日本語校正スキルが同時に有効だと指示が干渉するため、`suiko` の
+スキルと CLI を削除して `yomiyasu` に一本化しました。
+
 以前は使う 10 スキルを `.claude/skills/` へ取り込んでいました。上流の更新が届かず、
 自作スキルとの区別も付かなくなるため、プラグインへ戻しています。取り込んだ分は
 消しました。常時コンテキストを占める 25 スキルの description は約 1,600 トークンです。
@@ -213,7 +220,6 @@ Skill ツールからの二重の読み込みを禁じています。
 - `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
 - `show-me` — 図やコードのスケッチで話題を視覚的に説明する
-- `suiko` — 日本語文書の不自然さと読解負荷を診断して直す
 
 `dev-workflow` は `disable-model-invocation: true` で、`/dev-workflow` から明示的に
 呼んだときだけ動きます。
@@ -227,13 +233,8 @@ Skill ツールからの二重の読み込みを禁じています。
 `archify`（アーキテクチャ図の生成）は約 7 MB あるため `.gitignore` で除外し、
 上のコピーには含まれません。
 
-`suiko` と `ax` は外部の CLI に依存します。`suiko` は `cargo install suiko` で
-導入し（手順 3 の `rustup` 前提）、`ax` は `~/.local/bin` へ置きます。PATH は
-手順 4 の `.zshenv` が通します。CLI がない場合、スキルは手動チェックへ縮退します。
-
-`suiko` は Node.js と npm があれば textlint の AI 文章 preset
-（`@textlint-ja/ai-writing`）も実行します。`--no-textlintrc` を渡すため、
-プロジェクトの `.textlintrc` は読みません。Node.js は手順 5 の mise が入れます。
+`ax` は外部の CLI に依存します。`curl -fsSL https://ax.yusuke.run/install | sh` で
+`~/.local/bin` へ入り、PATH は手順 4 の `.zshenv` が通します。
 
 ### 9. Karabiner-Elements
 
@@ -359,10 +360,6 @@ Karabiner-EventViewerで次を確認できます。
 - `ax` — https://github.com/yusukebe/ax
   （`npx skills add yusukebe/ax` で導入。CLI も同じリポジトリ）
 - `show-me` — https://github.com/humanlayer/skills
-- `suiko` — https://github.com/nwiizo/suiko
-  （`cargo install suiko` で入る CLI と同じリポジトリ。2026-10-04 に上流の
-  v0.3.11 相当へ同期し、手元で足していた `ai-words-ja` preset の有効化と
-  `scripts/textlint-ai-writing.rc.json` は上流の廃止に合わせて消しました）
 - `archify` — https://github.com/tt-a1i/archify
   （MIT。`Cocoon-AI/architecture-diagram-generator` から派生している。手順 8 の
   とおり収録していないので、次のコマンドで配布元から取得する）
@@ -370,11 +367,6 @@ Karabiner-EventViewerで次を確認できます。
 ```sh
 npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --copy --yes
 ```
-
-`npx skills update -g` は `suiko` を上流の内容で置き換え、`~/.claude/skills/suiko` を
-`~/.agents/skills/suiko` へのシンボリックリンクに差し替えます。手元で足した変更は
-消えます。更新するときは上流版を取得したあと、`git show ad72fda -- .claude/skills/suiko`
-のパッチを当て直してから、実体のディレクトリとして `~/.claude/skills/` へ戻してください。
 
 残る `commit-msg`、`dev-workflow`、`en-comment`、`pair`、`refine-doc`、
 `research-plan` は自作で、配布元はありません。
@@ -384,13 +376,3 @@ https://github.com/mattpocock/skills （MIT）の 25 スキルは `.claude/skill
 入れています。実体は `~/.claude/plugins/cache/` にあり、リポジトリには入りません。
 `dev-workflow` が渡す `grill-with-docs`、`to-spec`、`to-tickets`、`implement`、
 `code-review`、`setup-matt-pocock-skills` はここから来ます。
-
-`suiko` が使う textlint 一式は収録せず、`scripts/run-textlint-ai-writing.sh` が実行の
-たびに npm の一時環境へ取得します。バージョンはスクリプト内で固定しています。
-
-- `textlint@15.8.0` — https://github.com/textlint/textlint
-- `@textlint-ja/textlint-rule-preset-ai-writing@1.7.0` —
-  https://github.com/textlint-ja/textlint-rule-preset-ai-writing
-
-どちらも MIT です。バージョンは `scripts/run-textlint-ai-writing.sh` の `--package`
-指定で固定しています。

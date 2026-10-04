@@ -25,7 +25,7 @@ Goal: the user can explain the code the feature touches without opening it.
 
    Feed it `1-understanding.md`. It grills the understanding and captures the glossary and ADRs as it goes. Fold what it surfaces back into `1-understanding.md`.
 
-6. Give `1-understanding.md` the suiko pass — see **Finishing an artifact** in `SKILL.md`.
+6. Give `1-understanding.md` the yomiyasu pass — see **Finishing an artifact** in `SKILL.md`.
 
 ## Gate
 

@@ -22,7 +22,7 @@ Goal: the requirements exist as a spec and a set of tickets in the project's tra
 
 5. Write `3-plan.md`: the spec's id or URL, the tickets in the order they unblock each other, the seams the spec chose to test at, and which requirement each ticket serves.
 
-6. Give `3-plan.md` the suiko pass — see **Finishing an artifact** in `SKILL.md`.
+6. Give `3-plan.md` the yomiyasu pass — see **Finishing an artifact** in `SKILL.md`.
 
 ## Gate
 

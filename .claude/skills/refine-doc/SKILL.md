@@ -1,7 +1,6 @@
 ---
 name: refine-doc
 description: 指定した日本語ドキュメントを、技術的な中身を残したまま再構成する。既定は元の85〜90%へ圧縮し、--keep を付けると長さを保ったまま読みやすさだけを直す。
-disable-model-invocation: false
 ---
 
 # refine-doc
@@ -29,10 +28,10 @@ python3 ~/.claude/skills/refine-doc/scripts/ratio.py measure <path>
 
 `target` が `yes` の節（500字超）が対象。500字以下の節は触らない。対象が0件のファイルは、その旨を報告して以降のステップから外す。
 
-つづいて元本をスクラッチへ退避する。ステップ5の比較元になる。
+つづいて元本を、システムプロンプトにあるスクラッチパッドディレクトリ（以下 `<scratch>`）へ退避する。ステップ5の比較元になる。`$SCRATCHPAD` という環境変数はないので、パスは字面で書く。
 
 ```sh
-cp <path> "$SCRATCHPAD/$(basename <path>).orig"
+cp <path> "<scratch>/$(basename <path>).orig"
 ```
 
 ## 2. ファイルごとにコンテキストを分ける
@@ -47,7 +46,7 @@ cp <path> "$SCRATCHPAD/$(basename <path>).orig"
 - ステップ3の憲章を一字一句そのまま。要約・翻訳・言い換えのいずれも加えない
 - ステップ4から6の全文
 
-サブエージェントは担当ファイル1本を、判定と suiko full まで自分で通しきる。親は各エージェントの報告を集めて突き合わせるだけで、判定も suiko も引き受けない。
+サブエージェントは担当ファイル1本を、判定と yomiyasu まで自分で通しきる。親は各エージェントの報告を集めて突き合わせるだけで、判定も yomiyasu も引き受けない。
 
 ## 3. 憲章
 
@@ -83,19 +82,19 @@ keep ではここに続けて、空いた分を中身へ回す。
 モードをそのまま `--mode` へ渡す。
 
 ```sh
-python3 ~/.claude/skills/refine-doc/scripts/ratio.py compare "$SCRATCHPAD/<name>.orig" <path> --mode <compress|keep>
-python3 ~/.claude/skills/refine-doc/scripts/ratio.py verify  "$SCRATCHPAD/<name>.orig" <path>
+python3 ~/.claude/skills/refine-doc/scripts/ratio.py compare "<scratch>/<name>.orig" <path> --mode <compress|keep>
+python3 ~/.claude/skills/refine-doc/scripts/ratio.py verify  "<scratch>/<name>.orig" <path>
 ```
 
 compress では `OVER`（90%超）はまだ削り、`UNDER`（85%未満）は落とした中身を戻す。keep では `OVER`（105%超）だけが差し戻しで、増えた分の言い換えを削る。keep に `UNDER` はない。
 
 `verify` の差分は保持域を壊した印なので、元の字面へ戻す。全対象節が `OK` になるまでステップ4と5を回す。どうしても帯に入らない節は、入らない理由を1行で残して報告に含める。
 
-## 6. suiko full
+## 6. yomiyasu
 
-担当ファイルが判定を通ったら、そのファイル1本を対象に suiko skill を `full` モードで実行する。`suiko lint` には `--experimental` を付け、増えた finding は採否を自分で判断する。
+担当ファイルが判定を通ったら、Skill tool で `yomiyasu:yomiyasu`（`/yomiyasu:yomiyasu`）を、そのファイル1本を対象に `--full` 付きで呼ぶ。技術文書なら `--domain tech` も付ける。返ってきた「書き直した本文」をファイルへ書き戻す。
 
-finding を採って本文を直したら、ステップ5の `compare` と `verify` をもう一度かける。帯を外れたらステップ4へ戻り、suiko の採否と帯の両方が立つところまで回す。
+書き戻したら、ステップ5の `compare` と `verify` をもう一度かける。yomiyasu が保持域を変えていたら元の字面へ戻す。帯を外れたらステップ4へ戻り、yomiyasu の書き直しと帯の両方が立つところまで回す。
 
 ## 完了条件
 
@@ -103,6 +102,6 @@ finding を採って本文を直したら、ステップ5の `compare` と `veri
 
 - 対象節すべてが `OK`、または帯外の理由が1行で書かれている
 - `verify` の `preserve-zone diffs` が0
-- suiko full の lint・outline・terms と通読が済み、finding の採否と理由が付いている
+- yomiyasu `--full` のリンターと Diff 検査が済み、「変えたところ」と「書き手に確かめたい点」が報告に載っている
 
 親は全ファイル分の3点を、報告の上で1件ずつ確かめる。報告の先頭でどちらのモードで走ったかを明記する。

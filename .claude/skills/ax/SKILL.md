@@ -26,9 +26,9 @@ ax https://docs.site.example/guide --md --budget 800 # read docs as markdown
 ```
 
 The workflow: fetch/--outline once → --locate/--count to confirm → ONE
---row/--table call. Repeat fetches of the same URL are cached ~2min, so
-probing is free (--fresh to bypass). Parse requests with -H or -u bypass
-the cache automatically.
+--row/--table call. Parse-mode requests (--outline, selectors) to the same
+URL are cached ~2min, so probing is free (--fresh to bypass). Plain fetches
+and requests with -H or -u are always live.
 
 ## Speed discipline
 

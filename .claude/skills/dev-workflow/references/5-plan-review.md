@@ -16,7 +16,7 @@ Goal: zero open issues before implementation starts. The plan is cheap to change
 
 3. Every open point takes one of three exits: answered here, folded back into the spec or the tickets, or recorded as an accepted risk with the reason it is acceptable. Loop back to step 1 if the resolutions changed the plan enough to be worth another pass.
 
-4. Once the loop settles, give `5-plan-review.md` the suiko pass — see **Finishing an artifact** in `SKILL.md`.
+4. Once the loop settles, give `5-plan-review.md` the yomiyasu pass — see **Finishing an artifact** in `SKILL.md`.
 
 ## Gate
 

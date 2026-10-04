@@ -13,13 +13,20 @@
   },
   "enabledPlugins": {
     "genshijin@genshijin": true,
-    "mattpocock-skills@claude-plugins-official": true
+    "mattpocock-skills@claude-plugins-official": true,
+    "yomiyasu@yomiyasu": true
   },
   "extraKnownMarketplaces": {
     "genshijin": {
       "source": {
         "source": "github",
         "repo": "InterfaceX-co-jp/genshijin"
+      }
+    },
+    "yomiyasu": {
+      "source": {
+        "source": "github",
+        "repo": "nanaism/yomiyasu"
       }
     }
   },
