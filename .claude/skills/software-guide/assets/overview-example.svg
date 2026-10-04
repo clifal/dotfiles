@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" font-family="'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6472"/>
+    </marker>
+    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f46800"/>
+      <stop offset="1" stop-color="#f2a900"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="800" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="600" y="58" text-anchor="middle" font-size="34" font-weight="700" fill="#1f2430">Grafana の全体像</text>
+  <text x="600" y="94" text-anchor="middle" font-size="18" fill="#5b6472">データは保存しない。いろいろな場所にあるデータを集めて「見える化」する</text>
+
+  <!-- Left: data sources -->
+  <rect x="40" y="140" width="290" height="420" rx="16" fill="#eef3fb" stroke="#9db4d9"/>
+  <text x="185" y="178" text-anchor="middle" font-size="20" font-weight="700" fill="#1f2430">① データソース</text>
+  <text x="185" y="202" text-anchor="middle" font-size="14" fill="#5b6472">データはここに保存されている</text>
+
+  <g font-size="16" fill="#1f2430">
+    <rect x="65" y="222" width="240" height="56" rx="10" fill="#ffffff" stroke="#9db4d9"/>
+    <text x="85" y="246" font-weight="700">メトリクス</text>
+    <text x="85" y="267" font-size="13" fill="#5b6472">Prometheus / Mimir など</text>
+
+    <rect x="65" y="290" width="240" height="56" rx="10" fill="#ffffff" stroke="#9db4d9"/>
+    <text x="85" y="314" font-weight="700">ログ</text>
+    <text x="85" y="335" font-size="13" fill="#5b6472">Loki / Elasticsearch など</text>
+
+    <rect x="65" y="358" width="240" height="56" rx="10" fill="#ffffff" stroke="#9db4d9"/>
+    <text x="85" y="382" font-weight="700">トレース</text>
+    <text x="85" y="403" font-size="13" fill="#5b6472">Tempo / Jaeger など</text>
+
+    <rect x="65" y="426" width="240" height="56" rx="10" fill="#ffffff" stroke="#9db4d9"/>
+    <text x="85" y="450" font-weight="700">データベース</text>
+    <text x="85" y="471" font-size="13" fill="#5b6472">MySQL / PostgreSQL など</text>
+
+    <rect x="65" y="494" width="240" height="50" rx="10" fill="#ffffff" stroke="#9db4d9"/>
+    <text x="85" y="516" font-weight="700">クラウドの監視</text>
+    <text x="85" y="535" font-size="13" fill="#5b6472">CloudWatch / Azure Monitor など</text>
+  </g>
+
+  <!-- Arrow: sources -> grafana -->
+  <line x1="338" y1="350" x2="418" y2="350" stroke="#5b6472" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="378" y="336" text-anchor="middle" font-size="14" fill="#5b6472">クエリ</text>
+
+  <!-- Center: Grafana -->
+  <rect x="425" y="140" width="350" height="420" rx="16" fill="url(#core)"/>
+  <text x="600" y="182" text-anchor="middle" font-size="26" font-weight="700" fill="#ffffff">② Grafana</text>
+  <text x="600" y="208" text-anchor="middle" font-size="14" fill="#fff6e8">接続・問い合わせ・描画・通知</text>
+
+  <!-- mini dashboard -->
+  <rect x="450" y="226" width="300" height="200" rx="10" fill="#181b1f"/>
+  <text x="466" y="250" font-size="13" fill="#d8d9da">ダッシュボード</text>
+  <!-- panel 1: time series -->
+  <rect x="462" y="260" width="180" height="90" rx="6" fill="#22252b"/>
+  <polyline points="470,330 490,315 510,322 530,295 550,305 570,280 590,290 610,272 632,278" fill="none" stroke="#73bf69" stroke-width="3"/>
+  <polyline points="470,340 490,334 510,338 530,325 550,330 570,318 590,322 610,310 632,314" fill="none" stroke="#5794f2" stroke-width="3"/>
+  <!-- panel 2: stat -->
+  <rect x="650" y="260" width="88" height="90" rx="6" fill="#22252b"/>
+  <text x="694" y="300" text-anchor="middle" font-size="26" font-weight="700" fill="#73bf69">99.9</text>
+  <text x="694" y="324" text-anchor="middle" font-size="12" fill="#d8d9da">%</text>
+  <!-- panel 3: bars -->
+  <rect x="462" y="358" width="130" height="58" rx="6" fill="#22252b"/>
+  <rect x="474" y="390" width="14" height="18" fill="#f2cc0c"/>
+  <rect x="496" y="378" width="14" height="30" fill="#f2cc0c"/>
+  <rect x="518" y="370" width="14" height="38" fill="#f2cc0c"/>
+  <rect x="540" y="384" width="14" height="24" fill="#f2cc0c"/>
+  <rect x="562" y="374" width="14" height="34" fill="#f2cc0c"/>
+  <!-- panel 4: logs -->
+  <rect x="600" y="358" width="138" height="58" rx="6" fill="#22252b"/>
+  <rect x="610" y="370" width="110" height="6" rx="3" fill="#8e8e8e"/>
+  <rect x="610" y="384" width="90" height="6" rx="3" fill="#f2495c"/>
+  <rect x="610" y="398" width="118" height="6" rx="3" fill="#8e8e8e"/>
+
+  <g font-size="15" fill="#ffffff">
+    <text x="450" y="458" font-weight="700">パネル</text>
+    <text x="510" y="458">= グラフ1枚。クエリ結果を描く</text>
+    <text x="450" y="486" font-weight="700">ダッシュボード</text>
+    <text x="568" y="486">= パネルを並べた画面</text>
+    <text x="450" y="514" font-weight="700">Explore</text>
+    <text x="520" y="514">= ダッシュボードなしで試し打ち</text>
+    <text x="450" y="542" font-weight="700">アラート</text>
+    <text x="520" y="542">= しきい値を超えたら通知</text>
+  </g>
+
+  <!-- Arrows: grafana -> outputs -->
+  <line x1="782" y1="280" x2="862" y2="250" stroke="#5b6472" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="782" y1="440" x2="862" y2="470" stroke="#5b6472" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Right: outputs -->
+  <rect x="870" y="140" width="290" height="200" rx="16" fill="#edf7ed" stroke="#8fc98a"/>
+  <text x="1015" y="178" text-anchor="middle" font-size="20" font-weight="700" fill="#1f2430">③ 人が見る</text>
+  <g font-size="15" fill="#1f2430">
+    <text x="895" y="215">・ブラウザでダッシュボードを開く</text>
+    <text x="895" y="245">・時間範囲を変えて過去を調べる</text>
+    <text x="895" y="275">・チームでダッシュボードを共有</text>
+    <text x="895" y="305">・障害時に原因を絞り込む</text>
+  </g>
+
+  <rect x="870" y="360" width="290" height="200" rx="16" fill="#fdeeee" stroke="#e59a9a"/>
+  <text x="1015" y="398" text-anchor="middle" font-size="20" font-weight="700" fill="#1f2430">③ 通知が届く</text>
+  <g font-size="15" fill="#1f2430">
+    <text x="895" y="435">・Slack</text>
+    <text x="895" y="465">・メール</text>
+    <text x="895" y="495">・PagerDuty など</text>
+    <text x="895" y="525" font-size="13" fill="#5b6472">（アラートルールの条件を満たしたとき）</text>
+  </g>
+
+  <!-- Bottom: steps -->
+  <text x="40" y="612" font-size="20" font-weight="700" fill="#1f2430">はじめて使うときの流れ</text>
+  <g font-size="16" fill="#1f2430">
+    <rect x="40" y="630" width="255" height="130" rx="14" fill="#f6f7f9" stroke="#c9ced6"/>
+    <circle cx="74" cy="664" r="18" fill="#f46800"/>
+    <text x="74" y="670" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">1</text>
+    <text x="102" y="670" font-weight="700">起動する</text>
+    <text x="58" y="704" font-size="14" fill="#5b6472">Docker で起動し</text>
+    <text x="58" y="726" font-size="14" fill="#5b6472">localhost:3000 を開く</text>
+
+    <line x1="300" y1="695" x2="330" y2="695" stroke="#5b6472" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="335" y="630" width="255" height="130" rx="14" fill="#f6f7f9" stroke="#c9ced6"/>
+    <circle cx="369" cy="664" r="18" fill="#f46800"/>
+    <text x="369" y="670" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">2</text>
+    <text x="397" y="670" font-weight="700">データソース追加</text>
+    <text x="353" y="704" font-size="14" fill="#5b6472">Connections から</text>
+    <text x="353" y="726" font-size="14" fill="#5b6472">Prometheus などの URL を登録</text>
+
+    <line x1="595" y1="695" x2="625" y2="695" stroke="#5b6472" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="630" y="630" width="255" height="130" rx="14" fill="#f6f7f9" stroke="#c9ced6"/>
+    <circle cx="664" cy="664" r="18" fill="#f46800"/>
+    <text x="664" y="670" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">3</text>
+    <text x="692" y="670" font-weight="700">パネルを作る</text>
+    <text x="648" y="704" font-size="14" fill="#5b6472">クエリを書いて</text>
+    <text x="648" y="726" font-size="14" fill="#5b6472">グラフの種類を選ぶ</text>
+
+    <line x1="890" y1="695" x2="920" y2="695" stroke="#5b6472" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="925" y="630" width="235" height="130" rx="14" fill="#f6f7f9" stroke="#c9ced6"/>
+    <circle cx="959" cy="664" r="18" fill="#f46800"/>
+    <text x="959" y="670" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">4</text>
+    <text x="987" y="670" font-weight="700">保存・通知</text>
+    <text x="943" y="704" font-size="14" fill="#5b6472">ダッシュボードを保存し</text>
+    <text x="943" y="726" font-size="14" fill="#5b6472">必要ならアラートを設定</text>
+  </g>
+</svg>

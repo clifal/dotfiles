@@ -220,9 +220,10 @@ Skill ツールからの二重の読み込みを禁じています。
 - `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
 - `show-me` — 図やコードのスケッチで話題を視覚的に説明する
+- `software-guide` — ソフトウェアの入門ガイドと図解を、一次情報の調査から作る
 
-`dev-workflow` は `disable-model-invocation: true` で、`/dev-workflow` から明示的に
-呼んだときだけ動きます。
+`dev-workflow` と `software-guide` は `disable-model-invocation: true` で、`/dev-workflow` や
+`/software-guide <ソフトウェア名>` のように明示的に呼んだときだけ動きます。
 
 `dev-workflow` の各フェーズは `mattpocock-skills` プラグインのスキルへ渡します。
 プラグインのスキルは名前空間付きで呼びます。そのため `/mattpocock-skills:grill-with-docs`
@@ -369,7 +370,7 @@ npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --
 ```
 
 残る `commit-msg`、`dev-workflow`、`en-comment`、`pair`、`refine-doc`、
-`research-plan` は自作で、配布元はありません。
+`research-plan`、`software-guide` は自作で、配布元はありません。
 
 https://github.com/mattpocock/skills （MIT）の 25 スキルは `.claude/skills/` へは
 置きません。手順 8 の `enabledPlugins` にある `mattpocock-skills` プラグインとして
