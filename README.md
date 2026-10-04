@@ -232,9 +232,8 @@ Skill ツールからの二重の読み込みを禁じています。
 手順 4 の `.zshenv` が通します。CLI がない場合、スキルは手動チェックへ縮退します。
 
 `suiko` は Node.js と npm があれば textlint の AI 文章 preset
-（`@textlint-ja/ai-writing` と `ai-words-ja`）も実行します。ルール構成は
-`.claude/skills/suiko/scripts/textlint-ai-writing.rc.json` で固定し、プロジェクトの
-`.textlintrc` は読みません。Node.js は手順 5 の mise が入れます。
+（`@textlint-ja/ai-writing`）も実行します。`--no-textlintrc` を渡すため、
+プロジェクトの `.textlintrc` は読みません。Node.js は手順 5 の mise が入れます。
 
 ### 9. Karabiner-Elements
 
@@ -361,9 +360,9 @@ Karabiner-EventViewerで次を確認できます。
   （`npx skills add yusukebe/ax` で導入。CLI も同じリポジトリ）
 - `show-me` — https://github.com/humanlayer/skills
 - `suiko` — https://github.com/nwiizo/suiko
-  （`cargo install suiko` で入る CLI と同じリポジトリ。textlint の `ai-words-ja`
-  preset と `scripts/textlint-ai-writing.rc.json` は手元で足した変更で、上流には
-  ない）
+  （`cargo install suiko` で入る CLI と同じリポジトリ。2026-10-04 に上流の
+  v0.3.11 相当へ同期し、手元で足していた `ai-words-ja` preset の有効化と
+  `scripts/textlint-ai-writing.rc.json` は上流の廃止に合わせて消しました）
 - `archify` — https://github.com/tt-a1i/archify
   （MIT。`Cocoon-AI/architecture-diagram-generator` から派生している。手順 8 の
   とおり収録していないので、次のコマンドで配布元から取得する）
@@ -392,8 +391,6 @@ https://github.com/mattpocock/skills （MIT）の 25 スキルは `.claude/skill
 - `textlint@15.8.0` — https://github.com/textlint/textlint
 - `@textlint-ja/textlint-rule-preset-ai-writing@1.7.0` —
   https://github.com/textlint-ja/textlint-rule-preset-ai-writing
-- `textlint-rule-preset-ai-words-ja@1.2.0` —
-  https://github.com/p1ass/textlint-rule-preset-ai-words-ja
 
-3 つとも MIT です。バージョン更新時は `scripts/run-textlint-ai-writing.sh` の `--package`
-指定 2 か所を同じ値にそろえ、`scripts/textlint-ai-writing.rc.json` も確認してください。
+どちらも MIT です。バージョンは `scripts/run-textlint-ai-writing.sh` の `--package`
+指定で固定しています。
