@@ -12,6 +12,7 @@ research/
     plan.md                   依頼書（このテンプレを埋めたもの）
     findings.md                調査結果（エージェントが書く）
     method.md                  調査記録（調べ方、出典の件数、検証の記録）
+    unresolved.md              未解決の項目（findings.md から分ける）
     findings-2.md              追加調査の結果（差分調査ごとに連番）
 ```
 
@@ -136,7 +137,6 @@ research/<topic>/plan.md に従って調査して
 <!-- テンプレートと違う形にしたいときだけ、ここに差分を書く（例: 一覧表の列、出典の項目）。 -->
 
 - 言語は日本語。
-- 料金・機能・提供状況は変わるため、アクセス日を必ず残す。公開日が不明なら「公開日不明」と書く。
 
 ### 用語の固定
 
@@ -150,14 +150,14 @@ research/<topic>/plan.md に従って調査して
 
 <!-- 無いと、どこまで調べれば終わりか分からず、浅いまま出てくるか、延々と広がる。 -->
 
-- 5 章の全 RQ に、答えまたは「未解決」の記載がある
+- 5 章の全 RQ について、答えが findings.md にあるか、埋まらなかった項目が unresolved.md にある
 - 選んだ調査深度の要件を満たしている
 - Tier 2 を使った箇所に、二次情報である旨の明示がある
 - `research/FINDINGS_TEMPLATE.md` の構成、記述、出典の規約を満たしている
 
 ## 10. 不明時のプロトコル
 
-一次情報で埋まらない項目は、必ず次の 3 点を書く。空欄で飛ばさない。
+一次情報で埋まらない項目は、`research/<topic>/unresolved.md` に必ず次の 3 点を書く。空欄で飛ばさない。findings.md には書かず、unresolved.md への参照やリンクも置かない。
 
 1. **何が不明か**
 2. **なぜ埋まらなかったか** — 分類する
@@ -176,6 +176,6 @@ research/<topic>/plan.md に従って調査して
 
 - この依頼書を最初に通読し、5 章の問いを作業単位にする
 - 7 章の格付けに従って情報源を選ぶ。Tier 3 は使わない
-- 書き出す前に `research/FINDINGS_TEMPLATE.md` を読み、8 章とその規約に沿って `research/<topic>/findings.md` と `research/<topic>/method.md` に書き出す。ファイルを書けない環境では、2 つの本文をそのまま報告として返す
+- 書き出す前に `research/FINDINGS_TEMPLATE.md` を読み、8 章とその規約に沿って `research/<topic>/findings.md`、`research/<topic>/method.md`、`research/<topic>/unresolved.md` に書き出す。ファイルを書けない環境では、3 つの本文をそのまま報告として返す
 - 9 章の完了条件を自分で照合してから終了する
-- 依頼書の記述と実際の状況が食い違う場合は、勝手に解釈を変えず、findings.md の該当する章の「未解決」に記録する
+- 依頼書の記述と実際の状況が食い違う場合は、勝手に解釈を変えず、unresolved.md に記録する
