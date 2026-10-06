@@ -10,6 +10,7 @@ macOS のセットアップ用設定ファイル一式。Windows に近いキー
 - `git/` — Git の設定とグローバル除外設定
 - `homebrew/` — Brewfile（formula、cask、VS Code 拡張）
 - `karabiner/` — Karabiner-Elements のキーマッピング
+- `markdownlint/` — markdownlint の共通設定とカスタムルール
 - `mise/` — mise で管理する言語・CLI ランタイムのバージョン定義
 - `vscode/` — VS Code のキーバインドと設定断片
 - `zsh/` — zsh の設定（`.zshrc` と `.zshenv`）
@@ -301,11 +302,38 @@ Visual Studio Code 本体と拡張は手順 3 の cask および `vscode` エン
 追加します。
 
 ```json
-"keyboard.dispatch": "keyCode"
+"keyboard.dispatch": "keyCode",
+"[markdown]": {
+  "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+  "editor.formatOnSave": true
+},
+"markdownlint.configFile": "${userHome}/.config/markdownlint/.markdownlint-cli2.jsonc"
 ```
 
-`vscode-settings-fragment.json` は、この設定だけを収めた参考ファイルです。
+`vscode-settings-fragment.json` は、これらの設定だけを収めた参考ファイルです。
 既存の settings.json を丸ごと置き換えないでください。
+
+#### markdownlint
+
+Markdown を保存すると、markdownlint が自動で直せる指摘を直します。共通の設定と
+カスタムルールを配置します。
+
+```sh
+mkdir -p ~/.config/markdownlint
+cp markdownlint/.markdownlint-cli2.jsonc markdownlint/ja-space.cjs ~/.config/markdownlint/
+```
+
+- `MD013`（行の長さ）は無効にしています
+- `ja-space.cjs` は、日本語と半角英数字の間に半角スペースを入れるカスタムルールです。
+  コード、URL、HTML の中と、句読点や括弧の隣は対象外です
+- カスタムルールは JavaScript を実行するため、VS Code で信頼したワークスペースでだけ
+  動きます
+
+コマンドで直すときは次を実行します。
+
+```sh
+npx markdownlint-cli2 --config ~/.config/markdownlint/.markdownlint-cli2.jsonc --fix <file>
+```
 
 ## キーマッピング一覧
 

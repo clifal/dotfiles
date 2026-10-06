@@ -1,0 +1,6 @@
+{
+  "config": {
+    "MD013": false
+  },
+  "customRules": ["./ja-space.cjs"]
+}
