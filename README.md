@@ -168,6 +168,13 @@ Skill ツールからの二重の読み込みを禁じています。
 収録されているため、`extraKnownMarketplaces` への追記は要りません。更新は
 `claude plugin update mattpocock-skills` で取り込めます。
 
+ただし公式のマーケットプレイスは配布元のコミットを固定しており、追従が遅れます。
+2026 年 10 月 7 日の時点で固定されているのは 1.2.3 で、配布元 `mattpocock/skills` は
+1.3.1、70 コミット先行しています。`claude plugin update` が「already at the latest」と
+答えるのはこのためです。配布元を `extraKnownMarketplaces` へ直接足せば先行分も
+入りますが、公式のマーケットプレイスへ切り替えた方針を戻すことになるので、
+固定が進むのを待ちます。
+
 `yomiyasu` は日本語の文章を読みやすく書き直すスキルのプラグインで、
 `extraKnownMarketplaces` に登録した `nanaism/yomiyasu` から入ります。`CLAUDE.md` は
 文章を書くときに `yomiyasu:yomiyasu` を `--full` 付きで使うよう指示しており、
@@ -209,6 +216,15 @@ Skill ツールからの二重の読み込みを禁じています。
 進めます。共有マシンや業務用の環境へそのまま持ち込む場合は、この項目を
 外すか `default` へ戻してください。
 
+`model` は `claude-opus-5` です。以前は 1M コンテキストの `opus[1m]` を指定して
+いましたが、通常の指定へ戻しています。`switchModelsOnFlag` は `false` で、長い会話でも
+別のモデルへ自動で切り替わりません。
+
+`effortLevel` は `high` です。これは既定値で、`modelSettings` にモデルごとの指定が
+ない場合に使われます。`modelSettings` では `claude-opus-5-5` を `xhigh`、
+`claude-opus-5` を `high` にしています。推論にかける手数が増えるぶん応答は遅く、
+消費トークンも増えるため、軽い用途が中心なら `medium` へ下げてください。
+
 #### スキル
 
 `.claude/skills/` の中身は次のとおりです。
@@ -221,10 +237,14 @@ Skill ツールからの二重の読み込みを禁じています。
 - `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
 - `show-me` — 図やコードのスケッチで話題を視覚的に説明する
+- `software-compare` — 同じ役割のソフトウェア 2〜4 個の比較ガイドと図解を、一次情報の調査から作る
 - `software-guide` — ソフトウェアの入門ガイドと図解を、一次情報の調査から作る
+- `spec-doc` — 調査結果のディレクトリから要件定義書・基本設計書・実装計画の 3 文書を作る
 
-`dev-workflow` と `software-guide` は `disable-model-invocation: true` で、`/dev-workflow` や
-`/software-guide <ソフトウェア名>` のように明示的に呼んだときだけ動きます。
+`dev-workflow`、`software-compare`、`software-guide`、`spec-doc` は
+`disable-model-invocation: true` で、`/dev-workflow` や `/software-guide <ソフトウェア名>`、
+`/software-compare <名前> <名前>`、`/spec-doc <ディレクトリ>` のように明示的に呼んだときだけ
+動きます。
 
 `dev-workflow` の各フェーズは `mattpocock-skills` プラグインのスキルへ渡します。
 プラグインのスキルは名前空間付きで呼びます。そのため `/mattpocock-skills:grill-with-docs`
