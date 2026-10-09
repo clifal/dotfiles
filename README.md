@@ -85,13 +85,25 @@ cp mise/config.toml ~/.config/mise/config.toml
 mise install
 ```
 
-Node.js、pnpm、Python、Terraform、kubectl、Helm、AWS CLI、TFLint、yq の
-バージョンを固定しています。この手順を飛ばすとこれらのコマンドは利用できません。
+Node.js、pnpm、Python、Terraform、kubectl、Helm、AWS CLI、TFLint、yq に加えて、
+Colima、Lima、Docker CLI、Docker Compose を入れています。この手順を飛ばすと
+これらのコマンドは利用できません。Colima は Docker Desktop を使わずにコンテナを
+動かすためのもので、`colima start` で仮想マシンを起動してから `docker` コマンドを
+使います。
+
+バージョンはどれも `latest` を指定しており、固定していません。Node.js だけは `lts`
+です。`latest` の解決結果はキャッシュされるため、`mise install` を実行しても
+新しい版へは上がりません。更新は `mise upgrade` で取り込み、差分は `mise outdated`
+で確認します。
+
+固定しない方針の代わりに、版を揃える必要がある場面ではプロジェクト側の `mise.toml`
+で指定してください。kubectl はクラスタのコントロールプレーンとのバージョン差に
+制約があり、`latest` が先行しすぎることがあります。
 
 Terraform だけは手順 3 の Brewfile でも `hashicorp/tap/terraform` を入れています。
 PATH では `/opt/homebrew/bin` が mise の shims より先に来るため、`terraform` を
-そのまま実行すると Homebrew 側が使われます。mise で固定したバージョンを使いたい
-ときは `mise exec terraform -- terraform ...` と書くか、`brew uninstall terraform`
+そのまま実行すると Homebrew 側が使われます。mise 側を使いたいときは
+`mise exec terraform -- terraform ...` と書くか、`brew uninstall terraform`
 で Homebrew 側を外してください。
 
 ### 6. Git
@@ -169,8 +181,8 @@ Skill ツールからの二重の読み込みを禁じています。
 `claude plugin update mattpocock-skills` で取り込めます。
 
 ただし公式のマーケットプレイスは配布元のコミットを固定しており、追従が遅れます。
-2026 年 10 月 7 日の時点で固定されているのは 1.2.3 で、配布元 `mattpocock/skills` は
-1.3.1、70 コミット先行しています。`claude plugin update` が「already at the latest」と
+2026 年 10 月 9 日の時点で固定されているのは 1.2.3 で、配布元 `mattpocock/skills` は
+1.3.1、81 コミット先行しています。`claude plugin update` が「already at the latest」と
 答えるのはこのためです。配布元を `extraKnownMarketplaces` へ直接足せば先行分も
 入りますが、公式のマーケットプレイスへ切り替えた方針を戻すことになるので、
 固定が進むのを待ちます。

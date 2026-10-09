@@ -1,4 +1,6 @@
 tap "hashicorp/tap"
+# GitHub command-line tool
+brew "gh"
 # GIF image/animation creator/editor
 brew "gifsicle"
 # Polyglot runtime manager (asdf rust clone)
