@@ -2,7 +2,7 @@
 # Claude Code などの non-interactive shell からも参照される。
 # 重い処理は書かないこと。
 
-# cargo でインストールしたバイナリ（suiko など）を non-interactive でも解決させる。
+# cargo でインストールしたバイナリを non-interactive でも解決させる。
 # .zshrc にも同じ PATH 追加があるため、typeset -U で重複を排除する。
 typeset -U path PATH
 path=("$HOME/.cargo/bin" $path)

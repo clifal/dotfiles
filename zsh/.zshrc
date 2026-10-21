@@ -7,8 +7,8 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 # Command Alias
 alias ls='ls -a'
-alias brewupf='brew update && brew upgrade --formula --yes && brew cleanup -s'
-alias brewupc='brew update && brew upgrade --cask --greedy --yes && brew cleanup -s'
+alias brewupf='brew update && brew upgrade --formula --yes && brew cleanup -s --prune=all'
+alias brewupc='brew update && brew upgrade --cask --greedy --yes && brew cleanup -s --prune=all'
 
 # Hook mise
 eval "$(mise activate zsh)"

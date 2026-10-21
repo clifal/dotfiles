@@ -33,7 +33,7 @@
       ]
     },
     {
-      "description": "USB keyboard: Left Command to Left Ctrl",
+      "description": "USB keyboard: Left Ctrl to Left Command",
       "manipulators": [
         {
           "type": "basic",

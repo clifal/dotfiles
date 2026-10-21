@@ -59,7 +59,7 @@ VS Code 拡張は `code` コマンド経由で導入されるため、Visual Stu
 Rust のツールチェーンが必要な場合は、`rustup` の導入後に `rustup-init` を
 別途実行します。
 
-cask の `swift-quit` は、ウィンドウをすべて閉じたアプリを自動で終了させます。
+cask の `swift-quit` はウィンドウをすべて閉じたアプリを自動で終了させます。
 Windows に近い挙動にするためのもので、初回起動時にアクセシビリティの許可と
 ログイン時の自動起動を設定してください。
 
@@ -93,12 +93,16 @@ Colima、Lima、Docker CLI、Docker Compose を入れています。この手順
 
 バージョンはどれも `latest` を指定しており、固定していません。Node.js だけは `lts`
 です。`latest` の解決結果はキャッシュされるため、`mise install` を実行しても
-新しい版へは上がりません。更新は `mise upgrade` で取り込み、差分は `mise outdated`
+新しいバージョンへは上がりません。更新は `mise upgrade` で取り込み、差分は `mise outdated`
 で確認します。
 
-固定しない方針の代わりに、版を揃える必要がある場面ではプロジェクト側の `mise.toml`
+固定しない方針の代わりに、バージョンを揃える必要がある場面ではプロジェクト側の `mise.toml`
 で指定してください。kubectl はクラスタのコントロールプレーンとのバージョン差に
 制約があり、`latest` が先行しすぎることがあります。
+
+このリポジトリの中でコマンドを実行すると、mise が `mise/config.toml` を未信頼の設定
+ファイルとして検出し、エラーを出します。`mise trust mise/config.toml` で信頼すると
+止まります。
 
 Terraform だけは手順 3 の Brewfile でも `hashicorp/tap/terraform` を入れています。
 PATH では `/opt/homebrew/bin` が mise の shims より先に来るため、`terraform` を
@@ -148,6 +152,9 @@ cp .ssh/config ~/.ssh/config
 `~/.ssh/config` の `IdentityFile` は `~/.ssh/private-ssh-key` を指しています。
 別のファイル名で鍵を作った場合は、この値を実際の鍵のパスへ書き換えてください。
 
+先頭の `Include ~/.colima/ssh_config` は、Colima が作る仮想マシンへ `ssh` で入るための
+設定を読み込みます。Colima を使わない場合は消してかまいません。
+
 公開鍵 `~/.ssh/private-ssh-key.pub` の内容を GitHub の
 Settings → SSH and GPG keys へ登録し、接続を確認します。
 
@@ -180,30 +187,19 @@ Skill ツールからの二重の読み込みを禁じています。
 収録されているため、`extraKnownMarketplaces` への追記は要りません。更新は
 `claude plugin update mattpocock-skills` で取り込めます。
 
-ただし公式のマーケットプレイスは配布元のコミットを固定しており、追従が遅れます。
-2026 年 10 月 9 日の時点で固定されているのは 1.2.3 で、配布元 `mattpocock/skills` は
-1.3.1、81 コミット先行しています。`claude plugin update` が「already at the latest」と
-答えるのはこのためです。配布元を `extraKnownMarketplaces` へ直接足せば先行分も
-入りますが、公式のマーケットプレイスへ切り替えた方針を戻すことになるので、
-固定が進むのを待ちます。
+公式のマーケットプレイスは配布元のコミットを固定しています。配布元が先行していても
+`claude plugin update` が「already at the latest」と答えることがあり、そのときは固定が
+進むのを待ちます。
 
 `yomiyasu` は日本語の文章を読みやすく書き直すスキルのプラグインで、
 `extraKnownMarketplaces` に登録した `nanaism/yomiyasu` から入ります。`CLAUDE.md` は
 文章を書くときに `yomiyasu:yomiyasu` を `--full` 付きで使うよう指示しており、
-`refine-doc` と `dev-workflow` も仕上げで呼び出します。以前は `suiko` を使って
-いましたが、2 つの日本語校正スキルが同時に有効だと指示が干渉するため、`suiko` の
-スキルと CLI を削除して `yomiyasu` に一本化しました。
+`refine-doc` と `dev-workflow` も仕上げで呼び出します。日本語の校正スキルは、
+2 つ同時に有効だと指示が干渉するため `yomiyasu` だけにしています。
 
-以前は使う 10 スキルを `.claude/skills/` へ取り込んでいました。上流の更新が届かず、
-自作スキルとの区別も付かなくなるため、プラグインへ戻しています。取り込んだ分は
-消しました。常時コンテキストを占める 25 スキルの description は約 1,600 トークンです。
-内訳は `claude plugin details mattpocock-skills` で見られます。
-
-`understand-anything` も入れていましたが、使わないスキルの description が毎ターンの
-コンテキストを占めていたため、プラグインとマーケットプレイスの登録ごと削除して
-います。取り込んでもいないので、使いたくなったら配布元から入れ直してください。
-キャッシュに残っていた旧バージョンが 510 MB の `node_modules` を抱えていたため、
-削除で 590 MB ほど空いています。
+プラグインのスキルは、取り込むと上流の更新が届かず自作スキルとの区別も付かなく
+なるため、プラグインのまま使います。常時コンテキストを占める 27 スキルの description は
+約 1,650 トークンで、内訳は `claude plugin details mattpocock-skills` で見られます。
 
 ステータスラインは `statusline-command.sh` を呼び出し、その中で `jq` を
 使います。`jq` は macOS 15 以降に標準搭載されているため、別途の導入は不要です。
@@ -216,26 +212,25 @@ Skill ツールからの二重の読み込みを禁じています。
 `syncClaudeAiSkills` は `false` です。claude.ai で有効にしたスキルの同期を止めます。
 `docs` や `docx` など 8 つが同期されていましたが、一度も使わないまま毎ターンの
 コンテキストを占めていました。手元から消しても次の同期で戻るため、同期そのものを
-切っています。既に降りてきた分は次回の起動で `~/.claude/skills/.trash` へ移り、
-`cleanupPeriodDays` の経過後に消えます。claude.ai 側で新しいスキルを有効にしても
-降りてこなくなるので、使いたくなったらこの項目を外してください。
+切っています。claude.ai 側で新しいスキルを有効にしても降りてこなくなるので、
+使いたくなったらこの項目を外してください。
 
-`cleanupPeriodDays` は `30` です。既定と同じ値ですが、会話ログと
-`~/.claude/skills/.trash` の保持期間として明示しています。`~/.claude/projects/` の
-会話ログは放っておくと数百 MB まで育ちます。短くしたいときは値を減らしてください。
+`cleanupPeriodDays` は `30` です。既定と同じ値ですが、会話ログの保持期間として
+明示しています。`~/.claude/projects/` の会話ログは放っておくと数百 MB まで育ちます。
+短くしたいときは値を減らしてください。
 
 `permissions.defaultMode` は `auto` です。ツールの実行許可を毎回確認せずに
 進めます。共有マシンや業務用の環境へそのまま持ち込む場合は、この項目を
 外すか `default` へ戻してください。
 
-`model` は `claude-opus-5` です。以前は 1M コンテキストの `opus[1m]` を指定して
-いましたが、通常の指定へ戻しています。`switchModelsOnFlag` は `false` で、長い会話でも
-別のモデルへ自動で切り替わりません。
+`model` は `opus` です。以前は 1M コンテキストの `opus[1m]` や、世代を固定する
+`claude-opus-5` を指定していましたが、最新の Opus へ追従する別名へ戻しています。
+`switchModelsOnFlag` は `false` で、長い会話でも別のモデルへ自動で切り替わりません。
 
 `effortLevel` は `high` です。これは既定値で、`modelSettings` にモデルごとの指定が
-ない場合に使われます。`modelSettings` では `claude-opus-5-5` を `xhigh`、
-`claude-opus-5` を `high` にしています。推論にかける手数が増えるぶん応答は遅く、
-消費トークンも増えるため、軽い用途が中心なら `medium` へ下げてください。
+ない場合に使われます。`modelSettings` では `claude-opus-5` を `xhigh` へ上げ、
+`claude-opus-5-5` は `high` のままにしています。推論にかける手数が増えるぶん応答は
+遅く、消費トークンも増えるため、軽い用途が中心なら `medium` へ下げてください。
 
 #### スキル
 
@@ -245,6 +240,7 @@ Skill ツールからの二重の読み込みを禁じています。
 - `commit-msg` — 変更内容の日本語説明から Conventional Commits のメッセージを作る
 - `dev-workflow` — 理解から実装、コードレビューまで人手の確認を挟んで進める
 - `en-comment` — 日本語をプログラミング用の英語コメントへ訳す
+- `env-audit` — ローカルとリポジトリの差分を反映し、不要なキャッシュを掃除する
 - `pair` — 開発者が手を動かす前提でペアプログラミングの相方を務める
 - `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
@@ -253,18 +249,18 @@ Skill ツールからの二重の読み込みを禁じています。
 - `software-guide` — ソフトウェアの入門ガイドと図解を、一次情報の調査から作る
 - `spec-doc` — 調査結果のディレクトリから要件定義書・基本設計書・実装計画の 3 文書を作る
 
-`dev-workflow`、`software-compare`、`software-guide`、`spec-doc` は
+`dev-workflow`、`env-audit`、`software-compare`、`software-guide`、`spec-doc` は
 `disable-model-invocation: true` で、`/dev-workflow` や `/software-guide <ソフトウェア名>`、
-`/software-compare <名前> <名前>`、`/spec-doc <ディレクトリ>` のように明示的に呼んだときだけ
-動きます。
+`/software-compare <名前> <名前>`、`/spec-doc <ディレクトリ>`、`/env-audit` のように
+明示的に呼んだときだけ動きます。
 
 `dev-workflow` の各フェーズは `mattpocock-skills` プラグインのスキルへ渡します。
-プラグインのスキルは名前空間付きで呼びます。そのため `/mattpocock-skills:grill-with-docs`
+プラグインのスキルは名前空間付きで呼ぶため、`/mattpocock-skills:grill-with-docs`
 の形で書いてあります。同名のローカルスキルがない限り `/grill-with-docs` でも通ります。
 フェーズ 3 以降は `docs/agents/issue-tracker.md` が要ります。これは
 `/mattpocock-skills:setup-matt-pocock-skills` が作ります。
 
-`archify`（アーキテクチャ図の生成）は約 7 MB あるため `.gitignore` で除外し、
+`archify`（アーキテクチャ図の生成）は約 18 MB あるため `.gitignore` で除外し、
 上のコピーには含まれません。
 
 `ax` は外部の CLI に依存します。`curl -fsSL https://ax.yusuke.run/install | sh` で
@@ -403,7 +399,7 @@ Karabiner-EventViewerで次を確認できます。
 - `F5`が画面輝度などとして動くMacでは、`fn + F5`が必要な場合があります。
   macOSの「F1、F2などのキーを標準のファンクションキーとして使用」を有効にすると、
   F5を単独で使いやすくなります。
-- Home／Endの変換は、多くのテキスト編集アプリでWindowsに近い動作になります。
+- Home／Endの変換は多くのテキスト編集アプリでWindowsに近い動作になります。
   アプリ独自のキー処理がある場合は動作が異なることがあります。
 - USBキーボードでは左Controlが左Commandになります。Windowsキーボードの
   `Ctrl + C` などを、指の位置を変えずにmacOSの `Command + C` として
@@ -426,13 +422,17 @@ Karabiner-EventViewerで次を確認できます。
   とおり収録していないので、次のコマンドで配布元から取得する）
 
 ```sh
-npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --copy --yes
+npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --yes
 ```
 
-残る `commit-msg`、`dev-workflow`、`en-comment`、`pair`、`refine-doc`、
-`research-plan`、`software-guide` は自作で、配布元はありません。
+`--copy` を付けないと実体は `~/.agents/skills/` へ置かれ、`~/.claude/skills/archify` は
+そこへのシンボリックリンクになります。
 
-https://github.com/mattpocock/skills （MIT）の 25 スキルは `.claude/skills/` へは
+残る `commit-msg`、`dev-workflow`、`en-comment`、`env-audit`、`pair`、`refine-doc`、
+`research-plan`、`software-compare`、`software-guide`、`spec-doc` は自作で、
+配布元はありません。
+
+https://github.com/mattpocock/skills （MIT）の 27 スキルは `.claude/skills/` へは
 置きません。手順 8 の `enabledPlugins` にある `mattpocock-skills` プラグインとして
 入れています。実体は `~/.claude/plugins/cache/` にあり、リポジトリには入りません。
 `dev-workflow` が渡す `grill-with-docs`、`to-spec`、`to-tickets`、`implement`、

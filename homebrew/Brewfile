@@ -23,6 +23,8 @@ cask "google-japanese-ime"
 cask "karabiner-elements"
 # Support for Logitech G gear
 cask "logitech-g-hub"
+# Meet, chat, call, and collaborate in just one place
+cask "microsoft-teams"
 # App to write, plan, collaborate, and get organised
 cask "notion"
 # Control your tools with a few keystrokes
