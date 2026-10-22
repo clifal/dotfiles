@@ -14,3 +14,6 @@ path=("$HOME/.local/bin" $path)
 # mise activate は .zshrc 側にあり interactive shell でしか走らないため、
 # shims ディレクトリを直接 PATH に載せる。
 path=("$HOME/.local/share/mise/shims" $path)
+
+# brew の curl（keg-only）を non-interactive でも /usr/bin/curl より優先させる。
+path=("/opt/homebrew/opt/curl/bin" $path)

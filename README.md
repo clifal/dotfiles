@@ -7,6 +7,7 @@ macOS のセットアップ用設定ファイル一式。Windows に近いキー
 
 - `.claude/` — Claude Code の設定、スキル、ステータスライン
 - `.ssh/` — SSH クライアント設定
+- `curl/` — curl の設定（`.curlrc`）
 - `git/` — Git の設定とグローバル除外設定
 - `homebrew/` — Brewfile（formula、cask、VS Code 拡張）
 - `karabiner/` — Karabiner-Elements のキーマッピング
@@ -63,19 +64,41 @@ cask の `swift-quit` はウィンドウをすべて閉じたアプリを自動�
 Windows に近い挙動にするためのもので、初回起動時にアクセシビリティの許可と
 ログイン時の自動起動を設定してください。
 
-### 4. zsh
+### 4. zsh と curl
 
 ```sh
 cp zsh/.zshrc ~/.zshrc
 cp zsh/.zshenv ~/.zshenv
+cp curl/.curlrc ~/.curlrc
 exec $SHELL -l
 ```
 
-`.zshrc` には `mise` のシェル連携と、keg-only である `rustup` の PATH 設定が
-含まれます。`.zshrc` は interactive shell でしか読まれないため、Claude Code の
+`.zshrc` には `mise` のシェル連携と、keg-only である `rustup` と `curl` の PATH
+設定が含まれます。`.zshrc` は interactive shell でしか読まれないため、Claude Code の
 ような non-interactive shell からは反映されません。そのため `.zshenv` で
 `~/.cargo/bin`、`~/.local/bin`、mise の shims ディレクトリを PATH へ追加して
-います。手順 8 のスキルが使う `ax` の解決に必要です。
+います。手順 8 のスキルが使う `ax` の解決に必要です。Homebrew の curl も
+`.zshenv` で PATH の先頭へ置き、macOS 付属の `/usr/bin/curl` より先に解決させて
+います。
+
+`.curlrc` は、curl が証明書の検証に使う CA バンドルを Homebrew の
+`ca-certificates` に固定します。Homebrew の curl は CA バンドルでの検証に
+失敗すると、macOS の信頼ストアで検証し直します。macOS の信頼ストアは、
+ブラウザが信頼を取り消した CA の証明書を受け入れることがあります。2026 年 10 月に
+鍵の漏えいが判明した eMudhra の中間 CA がその例で、この設定がないと curl は
+その CA が発行した証明書を受け入れます。次のコマンドが証明書エラー
+（`curl: (60)`）で終われば、設定が効いています。
+
+```sh
+curl https://dv-g3b-emudhra.we-have-a-problem.com/
+```
+
+macOS 付属の `/usr/bin/curl` は、`.curlrc` があっても macOS の信頼ストアで
+検証するため、この証明書を受け入れます。
+
+キーチェーンに社内 CA などを入れて
+いる場合、Homebrew の curl はその CA を信頼しなくなります。社内 CA を含む
+CA バンドルを別に用意し、`.curlrc` の `cacert` をそちらへ向けてください。
 
 ### 5. mise
 

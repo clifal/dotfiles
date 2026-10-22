@@ -1,4 +1,8 @@
 tap "hashicorp/tap"
+# Mozilla CA certificate store
+brew "ca-certificates"
+# Get a file from an HTTP, HTTPS or FTP server
+brew "curl"
 # GitHub command-line tool
 brew "gh"
 # GIF image/animation creator/editor
