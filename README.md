@@ -284,6 +284,7 @@ Skill ツールからの二重の読み込みを禁じています。
 - `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
 - `show-me` — 図やコードのスケッチで話題を視覚的に説明する
+- `slides` — 文書から PPTX と PDF のスライドを、同梱のテンプレートの上に組む
 - `software-compare` — 同じ役割のソフトウェア 2〜4 個の比較ガイドと図解を、一次情報の調査から作る
 - `software-guide` — ソフトウェアの入門ガイドと図解を、一次情報の調査から作る
 - `spec-doc` — 調査結果のディレクトリから要件定義書・基本設計書・実装計画の 3 文書を作る
@@ -468,8 +469,18 @@ npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --
 そこへのシンボリックリンクになります。
 
 残る `commit-msg`、`dev-workflow`、`en-comment`、`env-audit`、`pair`、`refine-doc`、
-`research-plan`、`software-compare`、`software-guide`、`spec-doc` は自作で、
+`research-plan`、`slides`、`software-compare`、`software-guide`、`spec-doc` は自作で、
 配布元はありません。
+
+`slides` は、スライドの規約と検査に
+<https://github.com/carnot-tech/jinba-consulting-pptx-skill>（MIT）を使います。
+`.claude/skills/` には収録していないので、次のコマンドで取得します。PDF を画像に
+する `poppler` は Brewfile に入っています。書体と Keynote の準備は `slides` の
+`SKILL.md` の「準備」にあります。
+
+```sh
+git clone https://github.com/carnot-tech/jinba-consulting-pptx-skill.git ~/.claude/skills/consulting-pptx-skill
+```
 
 https://github.com/mattpocock/skills （MIT）の 27 スキルは `.claude/skills/` へは
 置きません。手順 8 の `enabledPlugins` にある `mattpocock-skills` プラグインとして

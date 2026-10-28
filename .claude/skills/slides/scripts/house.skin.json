@@ -1,0 +1,91 @@
+{
+  "source": "assets/template.pptx",
+  "slide": {
+    "w": 10.0,
+    "h": 5.625,
+    "emu": [
+      9144000,
+      5143500
+    ]
+  },
+  "layout": "本文",
+  "title": {
+    "x": 0.4,
+    "y": 0.18,
+    "w": 9.2,
+    "h": 0.5,
+    "default_size": 16.0,
+    "size": 16.0
+  },
+  "subtitle": null,
+  "margin": {
+    "x0": 0.4,
+    "x1": 9.6,
+    "body_top": 0.85,
+    "bottom": 5.0
+  },
+  "sizes": {
+    "head": 11.0,
+    "body": 10.0,
+    "dense": 9.5
+  },
+  "fonts": {
+    "inherit": false,
+    "explicit": "BIZ UDGothic",
+    "theme_major": "BIZ UDGothic",
+    "theme_minor": "BIZ UDGothic"
+  },
+  "textbox": {
+    "insets": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "lst_style": null,
+    "bullet_level": null
+  },
+  "rule": {
+    "color": "bg1|lumMod=50000",
+    "row": 0.5,
+    "head": 1.0
+  },
+  "tables": {
+    "native": 0
+  },
+  "colors": {
+    "emphasis": "accent1",
+    "panel": "accent1|lumMod=20000|lumOff=80000",
+    "accent": "accent1",
+    "ng": "FF4B00"
+  },
+  "color_options": {
+    "emphasis": [
+      "accent1",
+      "accent2",
+      "accent3"
+    ],
+    "panel": [
+      "accent1|lumMod=20000|lumOff=80000",
+      "accent2|lumMod=20000|lumOff=80000",
+      "accent3|lumMod=20000|lumOff=80000"
+    ],
+    "accent": [
+      "accent1"
+    ]
+  },
+  "palette": [
+    "accent1",
+    "accent2",
+    "accent3",
+    "accent4",
+    "accent5",
+    "bg1",
+    "tx1",
+    "FF4B00",
+    "FFFFFF"
+  ],
+  "page_number": "slide",
+  "note": "scripts/make_template.py が作るテンプレートに合わせて手で書いた値。テンプレートを変えたら、ここもそろえる",
+  "note_accent": "区分の色はテーマの accent1〜3（カラーユニバーサルデザイン推奨配色セット ver.4 の青・緑・オレンジ）。accent4 は章扉の番号、FF4B00 は ✕ の赤"
+}

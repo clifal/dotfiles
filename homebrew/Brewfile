@@ -9,6 +9,8 @@ brew "gh"
 brew "gifsicle"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
+# PDF rendering library (based on the xpdf-3.0 code base)
+brew "poppler"
 # Rust toolchain installer
 brew "rustup"
 # Display directories as trees (with optional color/HTML output)
