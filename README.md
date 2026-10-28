@@ -7,7 +7,7 @@ macOS のセットアップ用設定ファイル一式。Windows に近いキー
 
 - `.claude/` — Claude Code の設定、スキル、ステータスライン
 - `.ssh/` — SSH クライアント設定
-- `curl/` — curl の設定（`.curlrc`）
+- `curl/` — curl の設定（`.curlrc`）と、macOS の CA バンドルを修正するスクリプト
 - `git/` — Git の設定とグローバル除外設定
 - `homebrew/` — Brewfile（formula、cask、VS Code 拡張）
 - `karabiner/` — Karabiner-Elements のキーマッピング
@@ -93,8 +93,24 @@ exec $SHELL -l
 curl https://dv-g3b-emudhra.we-have-a-problem.com/
 ```
 
-macOS 付属の `/usr/bin/curl` は、`.curlrc` があっても macOS の信頼ストアで
-検証するため、この証明書を受け入れます。
+macOS 付属の `/usr/bin/curl` も `.curlrc` を読むため、この証明書を拒否します。
+ただし `-q` を付けて `.curlrc` を読まずに実行すると、`/usr/bin/curl` は
+`/etc/ssl/cert.pem` で検証し、この証明書を受け入れます。macOS 付属の git と
+python3 も同じです。Apple は将来の macOS の更新でこのファイルを直すとしています。
+それまでは次のスクリプトで、eMudhra の中間 CA につながるルート証明書を
+このファイルから外してください。管理者パスワードを求められます。
+
+```sh
+curl/remove-emudhra-roots.sh
+```
+
+外すルート証明書のうち AAA Certificate Services は、問題のない CA にもつながって
+います。そうした CA の証明書を使うサイトにも、macOS 付属のツールでは接続
+できなくなることがあります。
+
+macOS の更新でファイルが元に戻ることがあるため、更新後はスクリプトを
+再実行してください。スクリプトの変更を取り消すときは
+`sudo cp -p /etc/ssl/cert.pem.orig /etc/ssl/cert.pem` を実行します。
 
 キーチェーンに社内 CA などを入れて
 いる場合、Homebrew の curl はその CA を信頼しなくなります。社内 CA を含む
