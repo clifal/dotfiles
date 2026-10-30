@@ -219,22 +219,16 @@ cp -R .claude/skills ~/.claude/
 `settings.json` にはマーケットプレイス `genshijin` とプラグインの有効化設定が
 含まれており、Claude Code の起動時に自動で導入されます。`genshijin` は
 `SessionStart` フックから毎セッション起動し、応答を圧縮した口調へ切り替えます。
-このフックがスキル本文をそのままコンテキストへ流すので、`CLAUDE.md` では
-Skill ツールからの二重の読み込みを禁じています。
 
 `mattpocock-skills` も `enabledPlugins` に入っています。公式のマーケットプレイスに
 収録されているため、`extraKnownMarketplaces` への追記は要りません。更新は
 `claude plugin update mattpocock-skills` で取り込めます。
 
-公式のマーケットプレイスは配布元のコミットを固定しています。配布元が先行していても
-`claude plugin update` が「already at the latest」と答えることがあり、そのときは固定が
-進むのを待ちます。
-
 `yomiyasu` は日本語の文章を読みやすく書き直すスキルのプラグインで、
 `extraKnownMarketplaces` に登録した `nanaism/yomiyasu` から入ります。`CLAUDE.md` は
 文章を書くときに `yomiyasu:yomiyasu` を `--full` 付きで使うよう指示しており、
-`refine-doc` と `dev-workflow` も仕上げで呼び出します。日本語の校正スキルは、
-2 つ同時に有効だと指示が干渉するため `yomiyasu` だけにしています。
+`refine-doc`、`dev-workflow`、`slides`、`software-compare`、`software-guide` も
+文章の推敲に使います。
 
 プラグインのスキルは、取り込むと上流の更新が届かず自作スキルとの区別も付かなく
 なるため、プラグインのまま使います。常時コンテキストを占める 27 スキルの description は
@@ -243,16 +237,13 @@ Skill ツールからの二重の読み込みを禁じています。
 ステータスラインは `statusline-command.sh` を呼び出し、その中で `jq` を
 使います。`jq` は macOS 15 以降に標準搭載されているため、別途の導入は不要です。
 
-`skillOverrides` は現在すべて既定のままです。スキルの description は常にコンテキストへ
-読み込まれるため、自動起動させたくないものは `"<スキル名>": "user-invocable-only"` を
-足して `/` からの明示的な呼び出しだけに限定できます。この指定が対象にするのは
-ローカルスキルだけで、プラグインとして導入したスキルでは無視されます。
+`skillOverrides` は空です。自動起動させたくないスキルは `"<スキル名>": "user-invocable-only"` を
+足すと、`/` からの明示的な呼び出しだけに限定できます。この指定が効くのはローカルスキル
+だけで、プラグインとして導入したスキルでは無視されます。
 
 `syncClaudeAiSkills` は `false` です。claude.ai で有効にしたスキルの同期を止めます。
-`docs` や `docx` など 8 つが同期されていましたが、一度も使わないまま毎ターンの
-コンテキストを占めていました。手元から消しても次の同期で戻るため、同期そのものを
-切っています。claude.ai 側で新しいスキルを有効にしても降りてこなくなるので、
-使いたくなったらこの項目を外してください。
+手元から消しても次の同期で戻るため、同期そのものを切っています。claude.ai 側で
+新しいスキルを有効にしても降りてこなくなるので、使いたくなったらこの項目を外してください。
 
 `cleanupPeriodDays` は `30` です。既定と同じ値ですが、会話ログの保持期間として
 明示しています。`~/.claude/projects/` の会話ログは放っておくと数百 MB まで育ちます。
@@ -262,14 +253,13 @@ Skill ツールからの二重の読み込みを禁じています。
 進めます。共有マシンや業務用の環境へそのまま持ち込む場合は、この項目を
 外すか `default` へ戻してください。
 
-`model` は `opus` です。以前は 1M コンテキストの `opus[1m]` や、世代を固定する
-`claude-opus-5` を指定していましたが、最新の Opus へ追従する別名へ戻しています。
-`switchModelsOnFlag` は `false` で、長い会話でも別のモデルへ自動で切り替わりません。
+`model` は最新の Opus へ追従する別名の `opus` です。`switchModelsOnFlag` は `false` で、
+長い会話でも別のモデルへ自動で切り替わりません。
 
-`effortLevel` は `high` です。これは既定値で、`modelSettings` にモデルごとの指定が
-ない場合に使われます。`modelSettings` では `claude-opus-5` を `xhigh` へ上げ、
-`claude-opus-5-5` は `high` のままにしています。推論にかける手数が増えるぶん応答は
-遅く、消費トークンも増えるため、軽い用途が中心なら `medium` へ下げてください。
+`effortLevel` と、`modelSettings` で指定するモデルごとの `effortLevel` は環境ごとに
+決めるため、`/env-audit` もリポジトリへ反映しません。値を上げるほど推論にかける
+手数が増え、応答は遅く、消費トークンも増えます。軽い用途が中心の環境では
+`medium` へ下げてください。
 
 #### スキル
 
@@ -455,7 +445,8 @@ Karabiner-EventViewerで次を確認できます。
 確認してください。
 
 - `ax` — https://github.com/yusukebe/ax
-  （`npx skills add yusukebe/ax` で導入。CLI も同じリポジトリ）
+  （CLI も同じリポジトリ。`~/.claude/skills/ax` はシンボリックリンクではなく実体なので、
+  配布元から取り直すときは `npx -y skills add yusukebe/ax --skill ax --agent claude-code --global --copy --yes` を実行する）
 - `show-me` — https://github.com/humanlayer/skills
 - `archify` — https://github.com/tt-a1i/archify
   （MIT。`Cocoon-AI/architecture-diagram-generator` から派生している。手順 8 の

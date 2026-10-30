@@ -3,10 +3,14 @@ tap "hashicorp/tap"
 brew "ca-certificates"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
+# Select default apps for documents and URL schemes on macOS
+brew "duti"
 # GitHub command-line tool
 brew "gh"
 # GIF image/animation creator/editor
 brew "gifsicle"
+# Audit git repos for secrets
+brew "gitleaks"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
 # PDF rendering library (based on the xpdf-3.0 code base)
