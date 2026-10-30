@@ -21,6 +21,7 @@
 .claude/projects/
 .claude/history.jsonl
 .claude/skills/archify/
+.claude/skill-guard/baselines/
 
 # Secrets and credentials
 .env

@@ -5,7 +5,7 @@ macOS のセットアップ用設定ファイル一式。Windows に近いキー
 
 ## 構成
 
-- `.claude/` — Claude Code の設定、スキル、ステータスライン
+- `.claude/` — Claude Code の設定、スキル、ステータスライン、スキルとプラグインの検査スクリプト
 - `.ssh/` — SSH クライアント設定
 - `curl/` — curl の設定（`.curlrc`）と、macOS の CA バンドルを修正するスクリプト
 - `git/` — Git の設定とグローバル除外設定
@@ -211,6 +211,7 @@ cp .claude/settings.json ~/.claude/settings.json
 cp .claude/CLAUDE.md ~/.claude/CLAUDE.md
 cp .claude/statusline-command.sh ~/.claude/statusline-command.sh
 cp -R .claude/skills ~/.claude/
+cp -R .claude/skill-guard ~/.claude/
 ```
 
 既に `~/.claude/settings.json` がある場合、上のコマンドは既存の設定を破棄します。
@@ -222,7 +223,7 @@ cp -R .claude/skills ~/.claude/
 
 `mattpocock-skills` も `enabledPlugins` に入っています。公式のマーケットプレイスに
 収録されているため、`extraKnownMarketplaces` への追記は要りません。更新は
-`claude plugin update mattpocock-skills` で取り込めます。
+`/skill-update mattpocock-skills` で、検査を通してから取り込みます（「スキルとプラグインの検査」を参照）。
 
 `yomiyasu` は日本語の文章を読みやすく書き直すスキルのプラグインで、
 `extraKnownMarketplaces` に登録した `nanaism/yomiyasu` から入ります。`CLAUDE.md` は
@@ -274,14 +275,17 @@ cp -R .claude/skills ~/.claude/
 - `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
 - `show-me` — 図やコードのスケッチで話題を視覚的に説明する
+- `skill-install` — スキルやプラグインを、SkillSpector の検査に通してから導入する
+- `skill-update` — 導入済みのスキルとプラグインの新しいバージョンを、SkillSpector の検査に通してから更新する
 - `slides` — 文書から PPTX と PDF のスライドを、同梱のテンプレートの上に組む
 - `software-compare` — 同じ役割のソフトウェア 2〜4 個の比較ガイドと図解を、一次情報の調査から作る
 - `software-guide` — ソフトウェアの入門ガイドと図解を、一次情報の調査から作る
 - `spec-doc` — 調査結果のディレクトリから要件定義書・基本設計書・実装計画の 3 文書を作る
 
-`dev-workflow`、`env-audit`、`software-compare`、`software-guide`、`spec-doc` は
-`disable-model-invocation: true` で、`/dev-workflow` や `/software-guide <ソフトウェア名>`、
-`/software-compare <名前> <名前>`、`/spec-doc <ディレクトリ>`、`/env-audit` のように
+`dev-workflow`、`env-audit`、`skill-install`、`skill-update`、`software-compare`、
+`software-guide`、`spec-doc` は `disable-model-invocation: true` で、`/dev-workflow` や
+`/software-guide <ソフトウェア名>`、`/software-compare <名前> <名前>`、`/spec-doc <ディレクトリ>`、
+`/env-audit`、`/skill-install <配布元>`、`/skill-update [名前]` のように
 明示的に呼んだときだけ動きます。
 
 `dev-workflow` の各フェーズは `mattpocock-skills` プラグインのスキルへ渡します。
@@ -295,6 +299,25 @@ cp -R .claude/skills ~/.claude/
 
 `ax` は外部の CLI に依存します。`curl -fsSL https://ax.yusuke.run/install | sh` で
 `~/.local/bin` へ入り、PATH は手順 4 の `.zshenv` が通します。
+
+#### スキルとプラグインの検査
+
+`/skill-install` と `/skill-update` はスキルとプラグインを入れる前に
+[NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) で検査します。検査は Colima の上の
+Docker で静的解析だけ（`--no-llm`）を行うので、手順 5 の Colima と Docker CLI が要ります。
+初回の検査でイメージ `skillspector:2.13.2`（約 730 MB）をビルドします。
+
+判定は 3 段階です。PASS ならそのまま入れ、REVIEW は指摘を見て承認したときだけ入れ、
+BLOCK なら止めます。静的解析だけなので誤検知が多く、`ax` や `archify` も BLOCK になります。
+指摘を確かめて受け入れたものは `~/.claude/skill-guard/baselines/` に baseline を作り、
+次の検査から数えません。baseline は検査した中身と SkillSpector のバージョンに紐づく
+マシンごとの判断なので、`.gitignore` で除外しています。
+
+`settings.json` の `hooks` にある PreToolUse フックは、Claude Code が検査を通さずに
+`claude plugin install` や `claude plugin update`、`skills add`、`~/.claude/skills` への
+`git clone` などを実行しようとすると止めます。止めるのは Claude Code が実行するコマンドだけで、
+ターミナルで直接打ったコマンドは止まりません。検査とフックの本体は
+`.claude/skill-guard/skill-guard.sh` です。
 
 ### 9. Karabiner-Elements
 
@@ -448,6 +471,8 @@ Karabiner-EventViewerで次を確認できます。
   （CLI も同じリポジトリ。`~/.claude/skills/ax` はシンボリックリンクではなく実体なので、
   配布元から取り直すときは `npx -y skills add yusukebe/ax --skill ax --agent claude-code --global --copy --yes` を実行する）
 - `show-me` — https://github.com/humanlayer/skills
+  （`ax` と `show-me` の配布元は `.claude/skill-guard/sources.json` にも記録しており、
+  `/skill-update` が差分を取る。どちらも手元で書き換えているので、差分は手元の変更として出る）
 - `archify` — https://github.com/tt-a1i/archify
   （MIT。`Cocoon-AI/architecture-diagram-generator` から派生している。手順 8 の
   とおり収録していないので、次のコマンドで配布元から取得する）
@@ -460,8 +485,8 @@ npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --
 そこへのシンボリックリンクになります。
 
 残る `commit-msg`、`dev-workflow`、`en-comment`、`env-audit`、`pair`、`refine-doc`、
-`research-plan`、`slides`、`software-compare`、`software-guide`、`spec-doc` は自作で、
-配布元はありません。
+`research-plan`、`skill-install`、`skill-update`、`slides`、`software-compare`、`software-guide`、
+`spec-doc` は自作で、配布元はありません。
 
 `slides` は、スライドの規約と検査に
 <https://github.com/carnot-tech/jinba-consulting-pptx-skill>（MIT）を使います。

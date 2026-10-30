@@ -1,0 +1,10 @@
+{
+  "ax": {
+    "url": "https://github.com/yusukebe/ax.git",
+    "path": "skills/ax"
+  },
+  "show-me": {
+    "url": "https://github.com/humanlayer/skills.git",
+    "path": "plugins/show-me/skills/show-me"
+  }
+}
