@@ -25,10 +25,20 @@ TOKEN_TTL=3600
 
 die() { echo "skill-guard: $*" >&2; exit 3; }
 
+# 並列の scan が同時に colima start すると後の方が失敗するので、mkdir のロックで 1 つに絞る。
+# 待つ側は、先に起動した方が Docker を使えるようにした時点で抜ける
 ensure_docker() {
   docker info >/dev/null 2>&1 && return
   command -v colima >/dev/null || die "Docker に接続できない"
-  colima start >&2 || die "colima start に失敗した"
+  local lock="$CACHE/colima.lock" waited=0
+  mkdir -p "$CACHE"
+  until mkdir "$lock" 2>/dev/null; do
+    docker info >/dev/null 2>&1 && return
+    (( ++waited > 300 )) && die "colima の起動待ちが 5 分を超えた（起動中のものが無ければ $lock を消す）"
+    sleep 1
+  done
+  docker info >/dev/null 2>&1 || colima start >&2 || { rmdir "$lock"; die "colima start に失敗した"; }
+  rmdir "$lock"
 }
 
 ensure_image() {

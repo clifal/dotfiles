@@ -472,7 +472,7 @@ Karabiner-EventViewerで次を確認できます。
   配布元から取り直すときは `npx -y skills add yusukebe/ax --skill ax --agent claude-code --global --copy --yes` を実行する）
 - `show-me` — https://github.com/humanlayer/skills
   （`ax` と `show-me` の配布元は `.claude/skill-guard/sources.json` にも記録しており、
-  `/skill-update` が差分を取る。どちらも手元で書き換えているので、差分は手元の変更として出る）
+  `/skill-update` が差分を取る。`commit` は取り込んだ版の SHA。どちらも配布元の内容に手を加えていない）
 - `archify` — https://github.com/tt-a1i/archify
   （MIT。`Cocoon-AI/architecture-diagram-generator` から派生している。手順 8 の
   とおり収録していないので、次のコマンドで配布元から取得する）
@@ -483,6 +483,13 @@ npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --
 
 `--copy` を付けないと実体は `~/.agents/skills/` へ置かれ、`~/.claude/skills/archify` は
 そこへのシンボリックリンクになります。
+
+`explain-before-shorten`（日本語の説明を口頭で伝わる形にしてから短くする）は、
+<https://zenn.dev/microsoft/articles/explain-before-shorten> の記事で公開されている
+スキルです。記事のライセンスを確かめていないため `.gitignore` で除外し、収録して
+いません。記事の SKILL.md を `~/.claude/skills/explain-before-shorten/SKILL.md` へ置き、
+frontmatter に `disable-model-invocation: true` を足して、`/explain-before-shorten` で
+呼んだときだけ動くようにしています。
 
 残る `commit-msg`、`dev-workflow`、`en-comment`、`env-audit`、`pair`、`refine-doc`、
 `research-plan`、`skill-install`、`skill-update`、`slides`、`software-compare`、`software-guide`、
