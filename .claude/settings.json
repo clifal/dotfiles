@@ -5,7 +5,9 @@
     "defaultMode": "auto"
   },
   "model": "opus",
-  "skillOverrides": {},
+  "skillOverrides": {
+    "consulting-pptx-skill": "user-invocable-only"
+  },
   "hooks": {
     "PreToolUse": [
       {

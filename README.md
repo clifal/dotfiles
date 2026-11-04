@@ -238,9 +238,12 @@ cp -R .claude/skill-guard ~/.claude/
 ステータスラインは `statusline-command.sh` を呼び出し、その中で `jq` を
 使います。`jq` は macOS 15 以降に標準搭載されているため、別途の導入は不要です。
 
-`skillOverrides` は空です。自動起動させたくないスキルは `"<スキル名>": "user-invocable-only"` を
-足すと、`/` からの明示的な呼び出しだけに限定できます。この指定が効くのはローカルスキル
-だけで、プラグインとして導入したスキルでは無視されます。
+`skillOverrides` では `consulting-pptx-skill` を `"user-invocable-only"` にしています。
+`/` からの明示的な呼び出しだけに限定する指定です。このスキルは `slides` がファイルとして
+読む規約と検査の置き場なので、自動起動すると「スライドにして」で `slides` と取り合います。
+ほかに自動起動させたくないスキルがあれば、同じく `"<スキル名>": "user-invocable-only"` を
+足します。この指定が効くのはローカルスキルだけで、プラグインとして導入したスキルでは
+無視されます。
 
 `syncClaudeAiSkills` は `false` です。claude.ai で有効にしたスキルの同期を止めます。
 手元から消しても次の同期で戻るため、同期そのものを切っています。claude.ai 側で
