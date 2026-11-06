@@ -277,7 +277,6 @@ cp -R .claude/skill-guard ~/.claude/
 - `pair` — 開発者が手を動かす前提でペアプログラミングの相方を務める
 - `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
-- `show-me` — 図やコードのスケッチで話題を視覚的に説明する
 - `skill-install` — スキルやプラグインを、SkillSpector の検査に通してから導入する
 - `skill-update` — 導入済みのスキルとプラグインの新しいバージョンを、SkillSpector の検査に通してから更新する
 - `slides` — 文書から PPTX と PDF のスライドを、同梱のテンプレートの上に組む
@@ -472,10 +471,9 @@ Karabiner-EventViewerで次を確認できます。
 
 - `ax` — https://github.com/yusukebe/ax
   （CLI も同じリポジトリ。`~/.claude/skills/ax` はシンボリックリンクではなく実体なので、
-  配布元から取り直すときは `npx -y skills add yusukebe/ax --skill ax --agent claude-code --global --copy --yes` を実行する）
-- `show-me` — https://github.com/humanlayer/skills
-  （`ax` と `show-me` の配布元は `.claude/skill-guard/sources.json` にも記録しており、
-  `/skill-update` が差分を取る。`commit` は取り込んだ版の SHA。どちらも配布元の内容に手を加えていない）
+  配布元から取り直すときは `npx -y skills add yusukebe/ax --skill ax --agent claude-code --global --copy --yes` を実行する。
+  配布元は `.claude/skill-guard/sources.json` にも記録しており、`/skill-update` が差分を取る。
+  `commit` は取り込んだ版の SHA。配布元の内容に手を加えていない）
 - `archify` — https://github.com/tt-a1i/archify
   （MIT。`Cocoon-AI/architecture-diagram-generator` から派生している。手順 8 の
   とおり収録していないので、次のコマンドで配布元から取得する）
@@ -486,13 +484,6 @@ npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --
 
 `--copy` を付けないと実体は `~/.agents/skills/` へ置かれ、`~/.claude/skills/archify` は
 そこへのシンボリックリンクになります。
-
-`explain-before-shorten`（日本語の説明を口頭で伝わる形にしてから短くする）は、
-<https://zenn.dev/microsoft/articles/explain-before-shorten> の記事で公開されている
-スキルです。記事のライセンスを確かめていないため `.gitignore` で除外し、収録して
-いません。記事の SKILL.md を `~/.claude/skills/explain-before-shorten/SKILL.md` へ置き、
-frontmatter に `disable-model-invocation: true` を足して、`/explain-before-shorten` で
-呼んだときだけ動くようにしています。
 
 残る `commit-msg`、`dev-workflow`、`en-comment`、`env-audit`、`pair`、`refine-doc`、
 `research-plan`、`skill-install`、`skill-update`、`slides`、`software-compare`、`software-guide`、

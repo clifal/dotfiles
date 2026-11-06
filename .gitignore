@@ -21,7 +21,6 @@
 .claude/projects/
 .claude/history.jsonl
 .claude/skills/archify/
-.claude/skills/explain-before-shorten/
 .claude/skill-guard/baselines/
 
 # Secrets and credentials
