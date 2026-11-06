@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PPTX を consulting-pptx-skill の 3 つの検査にかけ、既知の WARN は件数だけを出す。
 
-  python3 -I ~/.claude/skills/slides/scripts/check.py <pptx>
+  python3 -I ~/.claude/skills/pptx-slides/scripts/check.py <pptx>
 
 check_deck --house（規約）、check_deck --xml-only（PowerPoint が修復を求める不正）、check_deck_layout（溢れと隠れ）。
 既知の WARN と「中身の無い箱」が何かは ../quirks.md にある。FAIL があれば終了コード 1。

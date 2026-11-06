@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PPTX を Keynote で PDF に書き出し、4 ページずつ並べた目視用の画像を作る。
 
-  python3 -I ~/.claude/skills/slides/scripts/render.py <pptx> <画像の出力先フォルダ>
+  python3 -I ~/.claude/skills/pptx-slides/scripts/render.py <pptx> <画像の出力先フォルダ>
 
 PDF は PPTX と同じ場所に同じ名前で出る。Keynote が応答しないときと、Keynote が使えないときは ../quirks.md を見る。
 """

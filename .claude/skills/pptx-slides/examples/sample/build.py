@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """見本のデッキ（表紙・目次・章扉 3 枚＋本文 7 枚）。題材と数字は架空。design.md の「ページの形と部品」の例。
 
-  python3 -I ~/.claude/skills/slides/examples/sample/build.py [出力先フォルダ]
+  python3 -I ~/.claude/skills/pptx-slides/examples/sample/build.py [出力先フォルダ]
 
 出力先を省くと、この build.py と同じフォルダに「<TITLE>.pptx」ができる。新しいデッキはこのファイルを
 デッキのフォルダへ写して始める。ページの並びは末尾の FRONT と CHAPTERS で決め、本文中の「P.n」は b.ref() が数える。
@@ -10,7 +10,7 @@ import os
 import sys
 from pathlib import Path
 
-SKILL = Path(os.environ.get("SLIDES_SKILL", Path.home() / ".claude" / "skills" / "slides"))
+SKILL = Path(os.environ.get("SLIDES_SKILL", Path.home() / ".claude" / "skills" / "pptx-slides"))
 sys.path.insert(0, str(SKILL / "scripts"))
 from house import (  # noqa: E402
     BLUE, BLUE_D, BLUE_T, GRAY, GREEN, LIGHT, ORANGE, P, PALE, TOP, TXT, WHITE, X0, X1,

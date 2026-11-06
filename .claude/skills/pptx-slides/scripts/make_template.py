@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """assets/template.pptx を作る。版面と色を変えるときは、ここを直して作り直す。
 
-  python3 -I ~/.claude/skills/slides/scripts/make_template.py
+  python3 -I ~/.claude/skills/pptx-slides/scripts/make_template.py
 
 python-pptx の白紙のテンプレートから、レイアウトを表紙・章扉・本文・白紙の 4 つにしぼって組む。
 書体は BIZ UDGothic、色はカラーユニバーサルデザイン推奨配色セット（ver.4）から選ぶ（../design.md）。

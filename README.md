@@ -228,7 +228,7 @@ cp -R .claude/skill-guard ~/.claude/
 `yomiyasu` は日本語の文章を読みやすく書き直すスキルのプラグインで、
 `extraKnownMarketplaces` に登録した `nanaism/yomiyasu` から入ります。`CLAUDE.md` は
 文章を書くときに `yomiyasu:yomiyasu` を `--full` 付きで使うよう指示しており、
-`refine-doc`、`dev-workflow`、`slides`、`software-compare`、`software-guide` も
+`refine-doc`、`dev-workflow`、`pptx-slides`、`software-compare`、`software-guide` も
 文章の推敲に使います。
 
 プラグインのスキルは、取り込むと上流の更新が届かず自作スキルとの区別も付かなく
@@ -239,8 +239,8 @@ cp -R .claude/skill-guard ~/.claude/
 使います。`jq` は macOS 15 以降に標準搭載されているため、別途の導入は不要です。
 
 `skillOverrides` では `consulting-pptx-skill` を `"user-invocable-only"` にしています。
-`/` からの明示的な呼び出しだけに限定する指定です。このスキルは `slides` がファイルとして
-読む規約と検査の置き場なので、自動起動すると「スライドにして」で `slides` と取り合います。
+`/` からの明示的な呼び出しだけに限定する指定です。このスキルは `pptx-slides` がファイルとして
+読む規約と検査の置き場なので、自動起動すると「スライドにして」で `pptx-slides` と取り合います。
 ほかに自動起動させたくないスキルがあれば、同じく `"<スキル名>": "user-invocable-only"` を
 足します。この指定が効くのはローカルスキルだけで、プラグインとして導入したスキルでは
 無視されます。
@@ -275,11 +275,11 @@ cp -R .claude/skill-guard ~/.claude/
 - `en-comment` — 日本語をプログラミング用の英語コメントへ訳す
 - `env-audit` — ローカルとリポジトリの差分を反映し、不要なキャッシュを掃除する
 - `pair` — 開発者が手を動かす前提でペアプログラミングの相方を務める
+- `pptx-slides` — 文書から PPTX と PDF のスライドを、同梱のテンプレートの上に組む
 - `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
 - `skill-install` — スキルやプラグインを、SkillSpector の検査に通してから導入する
 - `skill-update` — 導入済みのスキルとプラグインの新しいバージョンを、SkillSpector の検査に通してから更新する
-- `slides` — 文書から PPTX と PDF のスライドを、同梱のテンプレートの上に組む
 - `software-compare` — 同じ役割のソフトウェア 2〜4 個の比較ガイドと図解を、一次情報の調査から作る
 - `software-guide` — ソフトウェアの入門ガイドと図解を、一次情報の調査から作る
 - `spec-doc` — 調査結果のディレクトリから要件定義書・基本設計書・実装計画の 3 文書を作る
@@ -485,14 +485,14 @@ npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --
 `--copy` を付けないと実体は `~/.agents/skills/` へ置かれ、`~/.claude/skills/archify` は
 そこへのシンボリックリンクになります。
 
-残る `commit-msg`、`dev-workflow`、`en-comment`、`env-audit`、`pair`、`refine-doc`、
-`research-plan`、`skill-install`、`skill-update`、`slides`、`software-compare`、`software-guide`、
+残る `commit-msg`、`dev-workflow`、`en-comment`、`env-audit`、`pair`、`pptx-slides`、
+`refine-doc`、`research-plan`、`skill-install`、`skill-update`、`software-compare`、`software-guide`、
 `spec-doc` は自作で、配布元はありません。
 
-`slides` は、スライドの規約と検査に
+`pptx-slides` は、スライドの規約と検査に
 <https://github.com/carnot-tech/jinba-consulting-pptx-skill>（MIT）を使います。
 `.claude/skills/` には収録していないので、次のコマンドで取得します。PDF を画像に
-する `poppler` は Brewfile に入っています。書体と Keynote の準備は `slides` の
+する `poppler` は Brewfile に入っています。書体と Keynote の準備は `pptx-slides` の
 `SKILL.md` の「準備」にあります。
 
 ```sh

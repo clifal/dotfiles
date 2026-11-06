@@ -2,7 +2,7 @@
 """Keynote が使えないときの代わりの目視。house.py が作る図形（矩形・楕円・三角・矢羽・線・文字）を HTML に描き直し、
 3 ページずつの画像にする。
 
-  python3 -I ~/.claude/skills/slides/scripts/preview.py <pptx> <出力先フォルダ>
+  python3 -I ~/.claude/skills/pptx-slides/scripts/preview.py <pptx> <出力先フォルダ>
 
 書体と行の折り返しは PowerPoint・Keynote と少し違う。崩れの当たりをつけるのに使い、渡す前の目視は Keynote の PDF で行う。
 色はテーマから、地色とレイアウトの飾り（タイトルの罫など）はレイアウトから読む。画像は描かない。画像にするには

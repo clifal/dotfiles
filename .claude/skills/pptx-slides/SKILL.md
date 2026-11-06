@@ -1,5 +1,5 @@
 ---
-name: slides
+name: pptx-slides
 description: 文書（Markdown など）から、渡す PPTX と PDF のスライドを、この skill のテンプレート（BIZ UD ゴシックとカラーユニバーサルデザインの配色）の上に python-pptx で組む・作り直す。ページ、グラフ、色を直すときも使う。「スライドにして」「デッキを作り直す」「この文書を PPTX の資料に」で使う。
 ---
 
@@ -96,7 +96,7 @@ PDF にする前に、新しく書いたページと直したページを、元�
 PDF にして見る前に、文言を yomiyasu に通す。新しく書いたページと直したページを書き出す。
 
 ```sh
-python3 -I ~/.claude/skills/slides/scripts/export_text.py "<pptx>" <スクラッチ>/text.md [ページ番号,...]
+python3 -I ~/.claude/skills/pptx-slides/scripts/export_text.py "<pptx>" <スクラッチ>/text.md [ページ番号,...]
 ```
 
 書き出したテキストを `yomiyasu:yomiyasu` に `--full` で通す。種類は slides、資料には元の文書を渡す。採った直しを `build.py` に戻して組み直す。検査の出力の「消えた語」に要点の語があれば、4 に戻ってそのページを直す。
@@ -106,7 +106,7 @@ python3 -I ~/.claude/skills/slides/scripts/export_text.py "<pptx>" <スクラッ
 ## 6. 検査する
 
 ```sh
-python3 -I ~/.claude/skills/slides/scripts/check.py "<pptx>"
+python3 -I ~/.claude/skills/pptx-slides/scripts/check.py "<pptx>"
 ```
 
 完了: FAIL が 0 で、残る WARN が [quirks.md](quirks.md) に挙げた既知のものだけ。溢れの候補が出たページは、7 で必ず見る。
@@ -114,7 +114,7 @@ python3 -I ~/.claude/skills/slides/scripts/check.py "<pptx>"
 ## 7. PDF にして全ページを見る
 
 ```sh
-python3 -I ~/.claude/skills/slides/scripts/render.py "<pptx>" <スクラッチ>/sheets
+python3 -I ~/.claude/skills/pptx-slides/scripts/render.py "<pptx>" <スクラッチ>/sheets
 ```
 
 PDF は PPTX の隣に出る。4 ページずつ並べた画像をすべて見て、consulting-pptx-skill の `rules.py --phase check` の基準を当てる。崩れを直したら 6 からやり直す。Keynote が応答しないとき、Keynote が使えないときは [quirks.md](quirks.md) を見る。

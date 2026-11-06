@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """PPTX の文言を、ページごと・行（同じ高さの箱）ごとにテキストへ書き出す。yomiyasu で推敲するときに使う。
 
-  python3 -I ~/.claude/skills/slides/scripts/export_text.py <pptx> <出力.md> [ページ番号,...]
+  python3 -I ~/.claude/skills/pptx-slides/scripts/export_text.py <pptx> <出力.md> [ページ番号,...]
 
 タイトルは「タイトル　」を頭に付けた行にする（「#」を付けると、yomiyasu が見出しとして短く直そうとする）。
 箱の中の改行は行を分けて残す。番号の丸、章扉の番号、フッター、ページ番号は書き出さない。
