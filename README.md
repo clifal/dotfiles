@@ -275,7 +275,7 @@ cp -R .claude/skill-guard ~/.claude/
 - `en-comment` — 日本語をプログラミング用の英語コメントへ訳す
 - `env-audit` — ローカルとリポジトリの差分を反映し、不要なキャッシュを掃除する
 - `pair` — 開発者が手を動かす前提でペアプログラミングの相方を務める
-- `pptx-slides` — 文書から PPTX と PDF のスライドを、同梱のテンプレートの上に組む
+- `pptx-slides` — 文書から PPTX と PDF のスライドを、同梱のテンプレートの上に組む。前の版との差分の PDF も作る
 - `refine-doc` — 日本語ドキュメントを、中身を残したまま再構成する
 - `research-plan` — 調査エージェントへ渡す依頼書を 1 枚にまとめる
 - `skill-install` — スキルやプラグインを、SkillSpector の検査に通してから導入する
