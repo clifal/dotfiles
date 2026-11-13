@@ -247,6 +247,10 @@ cp -R .claude/skill-guard ~/.claude/
 `model` は最新の Opus へ追従する別名の `opus` です。`switchModelsOnFlag` は `false` で、
 長い会話でも別のモデルへ自動で切り替わりません。
 
+`advisorModel` は `fable` です。Advisor ツールが助言を求める先のモデルで、
+`/advisor` から選ぶとこの値に入ります。`model` とは別に持つので、本体を変えずに
+相談先だけを切り替えられます。
+
 `effortLevel` と、`modelSettings` で指定するモデルごとの `effortLevel` は環境ごとに
 決めるため、`/env-audit` もリポジトリへ反映しません。値を上げるほど推論にかける
 手数が増え、応答は遅く、消費トークンも増えます。軽い用途が中心の環境では
@@ -466,11 +470,11 @@ Karabiner-EventViewerで次を確認できます。
   とおり収録していないので、次のコマンドで配布元から取得する）
 
 ```sh
-npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --yes
+npx -y skills add tt-a1i/archify --skill archify --agent claude-code --global --copy --yes
 ```
 
-`--copy` を付けないと実体は `~/.agents/skills/` へ置かれ、`~/.claude/skills/archify` は
-そこへのシンボリックリンクになります。
+`--copy` を外すと実体は `~/.agents/skills/` へ置かれ、`~/.claude/skills/archify` は
+そこへのシンボリックリンクになります。手元は `ax` と同じく実体で持っています。
 
 残る `commit-msg`、`dev-workflow`、`en-comment`、`env-audit`、`pair`、`pptx-slides`、
 `refine-doc`、`research-plan`、`skill-install`、`skill-update`、`software-compare`、`software-guide`、

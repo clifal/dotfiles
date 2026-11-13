@@ -54,6 +54,7 @@
       "effortLevel": "xhigh"
     }
   },
+  "advisorModel": "fable",
   "theme": "dark",
   "switchModelsOnFlag": false
 }

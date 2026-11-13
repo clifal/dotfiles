@@ -47,7 +47,9 @@ ensure_image() {
   rm -rf "$src"
   git clone -q --depth 1 --branch "v$VERSION" https://github.com/NVIDIA/SkillSpector.git "$src" 2>/dev/null \
     || die "SkillSpector の取得に失敗した"
-  docker build -q -t "$IMAGE" "$src" >&2 || die "イメージのビルドに失敗した"
+  # テストの見本コードを SentinelOne が誤検知するので、ビルド後はソースを残さない
+  docker build -q -t "$IMAGE" "$src" >&2 || { rm -rf "$src"; die "イメージのビルドに失敗した"; }
+  rm -rf "$src"
 }
 
 # Colima は $HOME しかマウントしないので、実体が $HOME 配下にあるか確かめる

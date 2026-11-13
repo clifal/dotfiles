@@ -73,8 +73,9 @@ baseline は、利用者が BLOCK や REVIEW の指摘を確かめたうえで�
   - `SKILL_GUARD_TOKEN=<token> git -C <dir> merge --ff-only <SHA>` を実行する
   - fast-forward できなければ止めて報告する
 - skills CLI の skill
-  - `SKILL_GUARD_TOKEN=<token> npx -y skills add <source> --skill <名前> --agent claude-code --global --yes` を実行する
-  - lock ファイルとシンボリックリンクの構成を保つため、導入時と同じ CLI で入れ直す
+  - `SKILL_GUARD_TOKEN=<token> npx -y skills add <source> --skill <名前> --agent claude-code --global --copy --yes` を実行する
+  - lock ファイルを保つため、導入時と同じ CLI で入れ直す
+  - `--copy` を付けると `~/.claude/skills/<名前>` に実体が置かれる。外すとシンボリックリンクに置き換わる
 - 配布元を記録した skill
   - `rsync -a --delete --exclude .git <新しいバージョン>/ ~/.claude/skills/<名前>/` で置き換える
   - `sources.json` の `commit` を新しいバージョンの SHA に書き換える
