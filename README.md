@@ -111,7 +111,7 @@ cp mise/config.toml ~/.config/mise/config.toml
 mise install
 ```
 
-Node.js、pnpm、Python、Terraform、kubectl、Helm、AWS CLI、TFLint、yq に加えて、
+Node.js、pnpm、Python、uv、Terraform、kubectl、Helm、AWS CLI、TFLint、yq に加えて、
 Colima、Lima、Docker CLI、Docker Compose を入れています。この手順を飛ばすと
 これらのコマンドは利用できません。Colima は Docker Desktop を使わずにコンテナを
 動かすためのもので、`colima start` で仮想マシンを起動してから `docker` コマンドを
@@ -218,6 +218,11 @@ cp -R .claude/skill-guard ~/.claude/
 `refine-doc`、`dev-workflow`、`pptx-slides`、`software-compare`、`software-guide` も
 文章の推敲に使います。
 
+`imozuru` は、知らない分野を引用と著者からたどって原文を集める調査のスキルの
+プラグインで、`extraKnownMarketplaces` に登録した `MaryCache/imozuru` から入ります。
+集めた原文は `~/research/<話題>/` に置きます。description が長く、
+常時コンテキストを約 620 トークン占めます。
+
 プラグインのスキルは、取り込むと上流の更新が届かず自作スキルとの区別も付かなく
 なるため、プラグインのまま使います。常時コンテキストを占める 27 スキルの description は
 約 1,650 トークンで、内訳は `claude plugin details mattpocock-skills` で見られます。
@@ -244,7 +249,8 @@ cp -R .claude/skill-guard ~/.claude/
 進めます。共有マシンや業務用の環境へそのまま持ち込む場合は、この項目を
 外すか `default` へ戻してください。
 
-`model` は最新の Opus へ追従する別名の `opus` です。`switchModelsOnFlag` は `false` で、
+`model` は `opus[1m]` です。最新の Opus へ追従する別名 `opus` に、
+100 万トークンのコンテキストを使う指定 `[1m]` を付けています。`switchModelsOnFlag` は `false` で、
 長い会話でも別のモデルへ自動で切り替わりません。
 
 `advisorModel` は `fable` です。Advisor ツールが助言を求める先のモデルで、
@@ -301,7 +307,7 @@ Docker で静的解析だけ（`--no-llm`）を行うので、手順 5 の Colim
 初回の検査でイメージ `skillspector:2.13.2`（約 730 MB）をビルドします。
 
 判定は 3 段階です。PASS ならそのまま入れ、REVIEW は指摘を見て承認したときだけ入れ、
-BLOCK なら止めます。静的解析だけなので誤検知が多く、`ax` や `archify` も BLOCK になります。
+BLOCK なら止めます。静的解析だけなので誤検知が多く、`ax`、`archify`、`imozuru` も BLOCK になります。
 指摘を確かめて受け入れたものは `~/.claude/skill-guard/baselines/` に baseline を作り、
 次の検査から数えません。baseline は検査した中身と SkillSpector のバージョンに紐づく
 マシンごとの判断なので、`.gitignore` で除外しています。

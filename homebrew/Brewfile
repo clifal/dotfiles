@@ -21,8 +21,6 @@ brew "rustup"
 brew "tree"
 # Terraform
 brew "hashicorp/tap/terraform", trusted: true
-# Audio utility
-cask "background-music"
 # Terminal-based AI coding assistant
 cask "claude-code"
 # Web browser

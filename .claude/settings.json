@@ -4,7 +4,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "skillOverrides": {
     "consulting-pptx-skill": "user-invocable-only"
   },
@@ -29,7 +29,8 @@
   "enabledPlugins": {
     "genshijin@genshijin": true,
     "mattpocock-skills@claude-plugins-official": true,
-    "yomiyasu@yomiyasu": true
+    "yomiyasu@yomiyasu": true,
+    "imozuru@imozuru": true
   },
   "extraKnownMarketplaces": {
     "genshijin": {
@@ -42,6 +43,12 @@
       "source": {
         "source": "github",
         "repo": "nanaism/yomiyasu"
+      }
+    },
+    "imozuru": {
+      "source": {
+        "source": "github",
+        "repo": "MaryCache/imozuru"
       }
     }
   },
